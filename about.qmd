@@ -1,9 +1,43 @@
 ---
-title: "About"
+title: "Codebook"
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: true
+    code-copy: true
+    code-tools: true
+
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
-About this site
 
-```{r}
-1 + 1
-```
+For more information about the MCAS, see the Department of Elementary
+and Secondary Education's
+[(DESE)](https://www.doe.mass.edu/mcas/results.html) page.
+
+| variable               | Measurement Level | Values                                                                                                                                         |
+|------------------|------------------|------------------------------------|
+| `gender`               | Nominal           | the reported gender identify of the student. Female: F, Male: M, Non-binary: N                                                                 |
+| `item Description`     | Nominal           | details of assessment question                                                                                                                 |
+| `item Possible Points` | Discrete          | The number of points available for a given `sitem`                                                                                             |
+| `Reporting Category`   | Nominal           | content area of `sitem`                                                                                                                        |
+|                        |                   | Motion and Forces                                                                                                                              |
+|                        |                   | Waves                                                                                                                                          |
+|                        |                   | Energy                                                                                                                                         |
+| `RT Percent Points`    | Continuous        | Percent of points earned by Rising Tide Students for a given `sitem`                                                                           |
+| `RT-State Diff`        | Discrete          | Difference between percent of points earned by Rising Tide Students and Students in the State for a given `sitem`                              |
+| `sitem`                | Nominal           | The question number the MCAS exam                                                                                                              |
+| `sitem_score`          | Discrete          | The number of points a student earned on a given `sitem`                                                                                       |
+| `sperflev`             | Ordinal           | The student's [performance level](https://www.doe.mass.edu/mcas/tdd/pld/)                                                                      |
+|                        |                   | Exceeds Expectations                                                                                                                           |
+|                        |                   | Meets Expectations                                                                                                                             |
+|                        |                   | Partially Meets Expectations                                                                                                                   |
+|                        |                   | Does Not Meet Expectations                                                                                                                     |
+| `sscaleds`             | Discrete          | The [student's scaled score](https://www.doe.mass.edu/mcas/parents/pgreport/ghs-english.pdf) by subject area (e: English, m: Math, s: Science) |
+| `ssgp`                 | Continuous        | The [student's growth percentile](https://www.doe.mass.edu/mcas/growth/default.html) by subject area (e: English, m: Math, s: Science)         |
+| `State Percent Points` | Continuous        | Percent of points earned by Massachusetts students for a given `sitem`   
+
+

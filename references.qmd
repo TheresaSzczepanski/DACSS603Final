@@ -1,0 +1,47 @@
+---
+title: "References"
+
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: true
+    code-copy: true
+    code-tools: true
+
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+Chang, W. (2022). *R Graphics Cookbook, 2nd Edition*. O'Reilly Media.
+
+Grolemund, G., & Wickham, H. (2016). *R for Data Science: Import, Tidy,
+Transform, Visualize, and Model Data*. O'Reilly Media.
+
+HighSchool Introductory Physics Item Report \[Data\]
+<https://profiles.doe.mass.edu/mcas/mcasitems2.aspx?grade=HS&subjectcode=PHY&linkid=23&orgcode=04830000&fycode=2022&orgtypecode=5&>
+
+H. Wickham. **ggplot2: Elegant Graphics for Data Analysis**.
+Springer-Verlag New York, 2009.
+
+Papay, J. P., Mantil, A., McDonough, A., Donahue, K., An, L., & Murnane,
+R. J. (n.d.). ***Lifting all boats? Accomplishments and Challenges from
+20 Years of Education Reform in Massachusetts***. Retrieved December 2,
+2022, from
+<https://annenberg.brown.edu/sites/default/files/LiftingAllBoats_FINAL.pdf>
+
+R Core Team. (2020). *R: A language and environment for statistical
+computing*. R Foundation for Statistical Computing, Vienna,
+Austria.<https://www.r-project.org>.
+
+RStudio Team. (2019). *RStudio: Integrated Development for R*. RStudio,
+Inc., Boston, MA. <https://www.rstudio.com>.
+
+Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R,
+Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E,
+Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K,
+Vaughan D, Wilke C, Woo K, Yutani H (2019). "Welcome to the tidyverse."
+*Journal of Open Source Software*, *4*(43), 1686.
+doi:10.21105/joss.01686 <https://doi.org/10.21105/joss.01686>.
+
