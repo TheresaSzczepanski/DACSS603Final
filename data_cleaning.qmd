@@ -69,5 +69,9 @@ HSPhy_2022_StateAchievementDF
 HSPhy_2023_StateAchievementDF<-read_state_achievement("data/2023_HSSci_NextGenMCAS.xlsx", 2023, "PHY" )
 HSPhy_2023_StateAchievementDF
 
+HSPhy_NextGen_StateAchievementDF<-rbind(HSPhy_2022_StateAchievementDF, HSPhy_2023_StateAchievementDF)
+
+HSPhy_NextGen_StateAchievementDF
+
 
 ```

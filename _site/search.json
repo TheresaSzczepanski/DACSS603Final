@@ -39,6 +39,13 @@
     "href": "data_cleaning.html#school-item-analysis-reports",
     "title": "Data Cleaning",
     "section": "School Item Analysis Reports",
-    "text": "School Item Analysis Reports"
+    "text": "School Item Analysis Reports\n\n\nCode\nHSPhy_2022_SchoolItemDF&lt;-read_school_item(\"data/2022_Physics_NextGenMCASItem.xlsx\", 2022, \"PHY\")\nHSPhy_2022_SchoolItemDF\n\n\n\n\n  \n\n\n\nCode\nHSPhy_2022_SchoolItemDF&lt;-HSPhy_2022_SchoolItemDF%&gt;%\n  left_join(HSPhy_2022_StateItemDF, by= c('Year'='Year', 'Subject'='Subject', 'ITEM' = 'ITEM'))%&gt;%\n  mutate(`School-State Diff` = `School%`- `State%`)\nHSPhy_2022_SchoolItemDF\n\n\n\n\n  \n\n\n\nCode\nHSPhy_2023_SchoolItemDF&lt;-read_school_item(\"data/2023_Physics_NextGenMCASItem.xlsx\", 2023, \"PHY\")\nHSPhy_2023_SchoolItemDF\n\n\n\n\n  \n\n\n\nCode\nHSPhy_2023_SchoolItemDF&lt;-HSPhy_2023_SchoolItemDF%&gt;%\n  left_join(HSPhy_2023_StateItemDF, by= c('Year'='Year', 'Subject'='Subject', 'ITEM' = 'ITEM'))%&gt;%\n  mutate(`School-State Diff` = `School%`- `State%`)"
+  },
+  {
+    "objectID": "data_cleaning.html#state-nextgen-achievement-reports",
+    "href": "data_cleaning.html#state-nextgen-achievement-reports",
+    "title": "Data Cleaning",
+    "section": "State NextGen Achievement Reports",
+    "text": "State NextGen Achievement Reports\n\n\nCode\nHSPhy_2022_StateAchievementDF&lt;-read_state_achievement(\"data/2022_HSSci_NextGenMCAS.xlsx\", 2022, \"PHY\" )\nHSPhy_2022_StateAchievementDF\n\n\n\n\n  \n\n\n\nCode\nHSPhy_2023_StateAchievementDF&lt;-read_state_achievement(\"data/2023_HSSci_NextGenMCAS.xlsx\", 2023, \"PHY\" )\nHSPhy_2023_StateAchievementDF\n\n\n\n\n  \n\n\n\nCode\nHSPhy_NextGen_StateAchievementDF&lt;-rbind(HSPhy_2022_StateAchievementDF, HSPhy_2023_StateAchievementDF)\n\nHSPhy_NextGen_StateAchievementDF"
   }
 ]
