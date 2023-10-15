@@ -1,0 +1,25 @@
+---
+title: "Data Cleaning"
+
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: true
+    code-copy: true
+    code-tools: true
+
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+# Read in Next Gen Test Item data sets
+
+```{r}
+#| label: setup
+#| warning: false
+#| message: false
+source('dependencies.R')
+
+```

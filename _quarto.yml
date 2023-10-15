@@ -9,8 +9,10 @@ website:
         text: Home
       - href: about.qmd
         text: Codebook
-      - href: references.qmd
-        text: References
+      - href: data_cleaning.qmd
+        text: Data Cleaning
+        
+bibliography: references.bib
 
 format:
   html:

@@ -11,6 +11,8 @@ format:
     code-fold: true
     code-copy: true
     code-tools: true
+    
+bibliography: references.bib
 
 editor: 
   markdown: 
@@ -24,21 +26,14 @@ editor:
 #| warning: false
 #| message: false
 
-library(tidyverse)
-library(ggplot2)
-library(lubridate)
-library(readxl)
-library(hrbrthemes)
-library(viridis)
-library(ggpubr)
-library(purrr)
-library(plotly)
-library(RColorBrewer)
+source('dependencies.R')
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 ```
 
 
 # Introduction
+
+[@knuth84]
 
 Massachusetts Comprehensive Assessment System (MCAS) tests were
 introduced as part of the Massachusetts Education Reform Act in 1993
@@ -130,3 +125,5 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 -   Are there notable differences in student performance for students
     with and without disabilities?
 :::
+
+# References

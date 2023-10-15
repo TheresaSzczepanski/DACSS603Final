@@ -12,7 +12,12 @@ editor:
   markdown: 
     wrap: 72
 ---
+```{r}
 
+#source('dependencies.R')
+#knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+
+```
 
 For more information about the MCAS, see the Department of Elementary
 and Secondary Education's
