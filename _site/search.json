@@ -47,5 +47,12 @@
     "title": "Data Cleaning",
     "section": "State NextGen Achievement Reports",
     "text": "State NextGen Achievement Reports\n\n\nCode\nHSPhy_2022_StateAchievementDF&lt;-read_state_achievement(\"data/2022_HSSci_NextGenMCAS.xlsx\", 2022, \"PHY\" )\nHSPhy_2022_StateAchievementDF\n\n\n\n\n  \n\n\n\nCode\nHSPhy_2023_StateAchievementDF&lt;-read_state_achievement(\"data/2023_HSSci_NextGenMCAS.xlsx\", 2023, \"PHY\" )\nHSPhy_2023_StateAchievementDF\n\n\n\n\n  \n\n\n\nCode\nHSPhy_NextGen_StateAchievementDF&lt;-rbind(HSPhy_2022_StateAchievementDF, HSPhy_2023_StateAchievementDF)\n\nHSPhy_NextGen_StateAchievementDF"
+  },
+  {
+    "objectID": "data_cleaning.html#it301-reports",
+    "href": "data_cleaning.html#it301-reports",
+    "title": "Data Cleaning",
+    "section": "IT301 Reports",
+    "text": "IT301 Reports\n\n\nCode\nSG9_standardXWalk&lt;-read_excel(\"data/NextGenMCASItemxWalk.xlsx\", sheet = \"HS_Phys_StandardxWalk\")\n\nIT301_test&lt;-read_excel(\"data/2023_Physics_IT301 MCAS District and School Test Item Analysis Summary.xlsx\", skip = 14)\nIT301_test\n\n\n\n\n  \n\n\n\nCode\nIT301_2022&lt;-read_IT301(\"data/2022_Physics_IT301 MCAS District and School Test Item Analysis Summary.xlsx\", 2022, \"PHY\" )\nIT301_2022\n\n\n\n\n  \n\n\n\nCode\nIT301_2023&lt;-read_IT301(\"data/2023_Physics_IT301 MCAS District and School Test Item Analysis Summary.xlsx\", 2023, \"PHY\" )\nIT301_2023\n\n\n\n\n  \n\n\n\nCode\nNextGenIT301&lt;- rbind(IT301_2022, IT301_2023)\n\nNextGenIT301&lt;-NextGenIT301%&gt;%\n  left_join(SG9_standardXWalk, by = \"Standard\")\n\nNextGenIT301"
   }
 ]

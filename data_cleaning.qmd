@@ -75,3 +75,28 @@ HSPhy_NextGen_StateAchievementDF
 
 
 ```
+
+## IT301 Reports
+
+```{r}
+
+SG9_standardXWalk<-read_excel("data/NextGenMCASItemxWalk.xlsx", sheet = "HS_Phys_StandardxWalk")
+
+IT301_test<-read_excel("data/2023_Physics_IT301 MCAS District and School Test Item Analysis Summary.xlsx", skip = 14)
+IT301_test
+
+
+IT301_2022<-read_IT301("data/2022_Physics_IT301 MCAS District and School Test Item Analysis Summary.xlsx", 2022, "PHY" )
+IT301_2022
+
+IT301_2023<-read_IT301("data/2023_Physics_IT301 MCAS District and School Test Item Analysis Summary.xlsx", 2023, "PHY" )
+IT301_2023
+
+NextGenIT301<- rbind(IT301_2022, IT301_2023)
+
+NextGenIT301<-NextGenIT301%>%
+  left_join(SG9_standardXWalk, by = "Standard")
+
+NextGenIT301
+
+```
