@@ -42,6 +42,32 @@ HSPhy_2023_StateItemDF
 ## School Item Analysis Reports
 
 ```{r}
+HSPhy_2022_SchoolItemDF<-read_school_item("data/2022_Physics_NextGenMCASItem.xlsx", 2022, "PHY")
+HSPhy_2022_SchoolItemDF
+
+HSPhy_2022_SchoolItemDF<-HSPhy_2022_SchoolItemDF%>%
+  left_join(HSPhy_2022_StateItemDF, by= c('Year'='Year', 'Subject'='Subject', 'ITEM' = 'ITEM'))%>%
+  mutate(`School-State Diff` = `School%`- `State%`)
+HSPhy_2022_SchoolItemDF
+
+
+HSPhy_2023_SchoolItemDF<-read_school_item("data/2023_Physics_NextGenMCASItem.xlsx", 2023, "PHY")
+HSPhy_2023_SchoolItemDF
+
+HSPhy_2023_SchoolItemDF<-HSPhy_2023_SchoolItemDF%>%
+  left_join(HSPhy_2023_StateItemDF, by= c('Year'='Year', 'Subject'='Subject', 'ITEM' = 'ITEM'))%>%
+  mutate(`School-State Diff` = `School%`- `State%`)
+
+```
+
+## State NextGen Achievement Reports
+
+```{r}
+HSPhy_2022_StateAchievementDF<-read_state_achievement("data/2022_HSSci_NextGenMCAS.xlsx", 2022, "PHY" )
+HSPhy_2022_StateAchievementDF
+
+HSPhy_2023_StateAchievementDF<-read_state_achievement("data/2023_HSSci_NextGenMCAS.xlsx", 2023, "PHY" )
+HSPhy_2023_StateAchievementDF
 
 
 ```

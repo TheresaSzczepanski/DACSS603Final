@@ -2,6 +2,35 @@ read_item_XWalk<-function(file_path, sheet_name){
   read_excel(file_path, sheet = sheet_name)
 }
 
+read_state_achievement<-function(file_path, year, subject){
+  if(subject == "PHY"){
+    read_excel(file_path, skip = 1, col_names = c("School Name", "School Code", "Subject", 
+                                                  "M+E Count", "M+E%", "E Count", "E%", 
+                                                  "M Count", "M%", "PM Count",
+                                                  "PM%", "NM Count", "NM%", 
+                                                  "Student Count", "delete",
+                                                  "Avg. Scaled Score", "delete", "delete"))%>%
+      select(!contains("delete"))%>%
+      mutate(`M+E Count` = as.integer(`M+E Count`))%>%
+      mutate(`M+E%` = as.numeric(`M+E%`))%>%
+      mutate(`E Count` = as.integer(`E Count`))%>%
+      mutate(`E%` = as.numeric(`E%`))%>%
+      mutate(`M Count` = as.integer(`M Count`))%>%
+      mutate(`M%` = as.numeric(`M%`))%>%
+      mutate(`PM Count` = as.integer(`PM Count`))%>%
+      mutate(`PM%` = as.numeric(`PM%`))%>%
+      mutate(`NM Count` = as.integer(`NM Count`))%>%
+      mutate(`NM%` = as.numeric(`NM%`))%>%
+      mutate(`Student Count` = as.integer(`Student Count`))%>%
+      mutate(`Avg. Scaled Score` = as.integer(`Avg. Scaled Score`))%>%
+     
+  
+      mutate(`Year` = year)%>%
+      filter(`Subject`== subject)
+    
+  }
+}
+
 # subject should be PHY or BIO
  read_school_item<-function(file_path, year, subject){
    if(subject == "PHY"){
@@ -13,13 +42,13 @@ read_item_XWalk<-function(file_path, sheet_name){
        mutate(Tested = as.integer(Tested))%>%
        mutate(`Year` = year)%>%
        mutate(`Subject` = subject)%>%
-         select(`Year`, `Subject`, `School Name`, `Tested`, `ITEM`, `School%`)
+         select(`Year`, `Subject`, `School Name`, `School Code`, `Tested`, `ITEM`, `School%`)
    }
    
  }
  
  
-# subject should be PHY or BIO
+# subject should be PHY or BIO,
 read_state_item<-function(file_path, year, subject){
   if(subject == "PHY"){
     State_Percent<-read_excel(file_path, skip = 1)%>%
