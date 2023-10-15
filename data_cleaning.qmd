@@ -14,12 +14,33 @@ editor:
     wrap: 72
 ---
 
-# Read in Next Gen Test Item data sets
+# Load libraries
 
 ```{r}
 #| label: setup
 #| warning: false
 #| message: false
 source('dependencies.R')
+
+```
+
+# Read in Data Sets
+
+## State Item Analysis Report
+```{r}
+HSPhy_2022_StateItemDF<-read_state_item("data/2022_Physics_District_NextGenMCASItem.xlsx", 2022, "PHY" )
+
+HSPhy_2022_StateItemDF
+
+HSPhy_2023_StateItemDF<-read_state_item("data/2023_Physics_District_NextGenMCASItem.xlsx", 2023, "PHY" )
+
+HSPhy_2023_StateItemDF
+
+```
+
+## School Item Analysis Reports
+
+```{r}
+
 
 ```
