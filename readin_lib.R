@@ -1,7 +1,36 @@
 read_item_XWalk<-function(file_path, sheet_name){
   read_excel(file_path, sheet = sheet_name)
 }
+## Read in IT301 HS Physics reports to extract Item standards, Science Practices
+## Possible Points,  Item Type, Reporting Category
 
+read_IT301 <- function(file_path, year, subject){
+  if(subject == "PHY"){
+    IT301_DF<-read_excel(file_path, skip = 15, col_names = c("delete", "ITEM", "delete", "Item Type",
+                                                   "delete", "delete",
+                                                   "Reporting Category", "delete",
+                                                   "Standard", "delete",
+                                                   "Item Desc", "delete",
+                                                   "Practice Category", "delete",
+                                                   "delete",
+                                                   "Item Possible Points", "District%",
+                                                   "delete",
+                                                   "State%", "District-State Diff"))%>%
+      select(`ITEM`, `Item Type`, `Reporting Category`, `Standard`, `Item Desc`,
+             `Practice Category`, `Item Possible Points`)%>%
+      mutate(`Year` = year)
+    IT301_DF<-head(IT301_DF, -5)
+    IT301_DF%>%
+      mutate(`Item Possible Points` = as.integer(`Item Possible Points`))%>%
+      mutate(`ITEM` = as.integer(`ITEM`))%>%
+      #na_if(`Practice Category', "None")%>%
+      mutate(`Subject` = subject)%>%
+      select(`Year`, `Subject`, `ITEM`, `Item Type`, `Standard`, `Reporting Category`,
+             `Practice Category`, `Item Possible Points`, `Item Desc`)
+  }
+}
+
+## Read in NextGenMCAS School reports with Achievement levels from DESE Statewide reports
 read_state_achievement<-function(file_path, year, subject){
   if(subject == "PHY"){
     state_perf_sum <-read_excel(file_path, skip = 1, col_names = c("delete", "School Code", "Subject", 
@@ -75,7 +104,8 @@ read_state_achievement<-function(file_path, year, subject){
   }
 }
 
-# subject should be PHY or BIO
+## Read NextGenMCASItem School wide reports
+# subject should be PHY or BIO,
  read_school_item<-function(file_path, year, subject){
    if(subject == "PHY"){
      read_excel(file_path, skip = 1)%>%
@@ -93,7 +123,7 @@ read_state_achievement<-function(file_path, year, subject){
    
  }
  
- 
+ ## Read NextGenMCASItem District wide reports to extract state aggregate data
 # subject should be PHY or BIO,
 read_state_item<-function(file_path, year, subject){
   if(subject == "PHY"){
