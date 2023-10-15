@@ -20,6 +20,7 @@ editor:
 #| label: setup
 #| warning: false
 #| message: false
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 source('dependencies.R')
 
 ```

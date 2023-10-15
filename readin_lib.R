@@ -2,9 +2,23 @@ read_item_XWalk<-function(file_path, sheet_name){
   read_excel(file_path, sheet = sheet_name)
 }
 
-# read_school_item<-function(file_path, year, subject){
-#   
-# }
+# subject should be PHY or BIO
+ read_school_item<-function(file_path, year, subject){
+   if(subject == "PHY"){
+     read_excel(file_path, skip = 1)%>%
+       select(!contains("Subject"))%>%
+       select(!contains("Part. Rate"))%>%
+       pivot_longer(!(contains("School")|contains("Tested")|contains("Rate")), names_to = "ITEM", values_to = "School%")%>%
+       mutate(ITEM = as.integer(ITEM))%>%
+       mutate(Tested = as.integer(Tested))%>%
+       mutate(`Year` = year)%>%
+       mutate(`Subject` = subject)%>%
+         select(`Year`, `Subject`, `School Name`, `Tested`, `ITEM`, `School%`)
+   }
+   
+ }
+ 
+ 
 # subject should be PHY or BIO
 read_state_item<-function(file_path, year, subject){
   if(subject == "PHY"){
@@ -17,8 +31,9 @@ read_state_item<-function(file_path, year, subject){
       mutate(`State%` = `District%`)%>%
       select(`ITEM`, `State%`)%>%
       mutate(`Year` = year)%>%
-      mutate(`Subject` = subject)
-    view(State_Percent)
+      mutate(`Subject` = subject)%>%
+      select(`Year`, `Subject`, `ITEM`, `State%`)
+    #view(State_Percent)
     
     # if(year > 2019){
     #   read_excel(file_path,

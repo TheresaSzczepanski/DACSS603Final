@@ -145,7 +145,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#read-in-next-gen-test-item-data-sets" id="toc-read-in-next-gen-test-item-data-sets" class="nav-link active" data-scroll-target="#read-in-next-gen-test-item-data-sets">Read in Next Gen Test Item data sets</a></li>
+  <li><a href="#load-libraries" id="toc-load-libraries" class="nav-link active" data-scroll-target="#load-libraries">Load libraries</a></li>
+  <li><a href="#read-in-data-sets" id="toc-read-in-data-sets" class="nav-link" data-scroll-target="#read-in-data-sets">Read in Data Sets</a>
+  <ul class="collapse">
+  <li><a href="#state-item-analysis-report" id="toc-state-item-analysis-report" class="nav-link" data-scroll-target="#state-item-analysis-report">State Item Analysis Report</a></li>
+  <li><a href="#school-item-analysis-reports" id="toc-school-item-analysis-reports" class="nav-link" data-scroll-target="#school-item-analysis-reports">School Item Analysis Reports</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -169,18 +174,58 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="read-in-next-gen-test-item-data-sets" class="level1">
-<h1>Read in Next Gen Test Item data sets</h1>
+<section id="load-libraries" class="level1">
+<h1>Load libraries</h1>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'dependencies.R'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>, <span class="at">warning=</span><span class="cn">FALSE</span>, <span class="at">message=</span><span class="cn">FALSE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'dependencies.R'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="read-in-data-sets" class="level1">
+<h1>Read in Data Sets</h1>
+<section id="state-item-analysis-report" class="level2">
+<h2 class="anchored" data-anchor-id="state-item-analysis-report">State Item Analysis Report</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HSPhy_2022_StateItemDF<span class="ot">&lt;-</span><span class="fu">read_state_item</span>(<span class="st">"data/2022_Physics_District_NextGenMCASItem.xlsx"</span>, <span class="dv">2022</span>, <span class="st">"PHY"</span> )</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>HSPhy_2022_StateItemDF</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["ITEM"],"name":[1],"type":["int"],"align":["right"]},{"label":["State%"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Year"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Subject"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"86","3":"2022","4":"PHY"},{"1":"2","2":"62","3":"2022","4":"PHY"},{"1":"3","2":"66","3":"2022","4":"PHY"},{"1":"4","2":"47","3":"2022","4":"PHY"},{"1":"5","2":"72","3":"2022","4":"PHY"},{"1":"6","2":"41","3":"2022","4":"PHY"},{"1":"7","2":"60","3":"2022","4":"PHY"},{"1":"8","2":"52","3":"2022","4":"PHY"},{"1":"9","2":"61","3":"2022","4":"PHY"},{"1":"10","2":"63","3":"2022","4":"PHY"},{"1":"11","2":"65","3":"2022","4":"PHY"},{"1":"12","2":"68","3":"2022","4":"PHY"},{"1":"13","2":"80","3":"2022","4":"PHY"},{"1":"14","2":"61","3":"2022","4":"PHY"},{"1":"15","2":"71","3":"2022","4":"PHY"},{"1":"16","2":"46","3":"2022","4":"PHY"},{"1":"17","2":"71","3":"2022","4":"PHY"},{"1":"18","2":"66","3":"2022","4":"PHY"},{"1":"19","2":"74","3":"2022","4":"PHY"},{"1":"20","2":"53","3":"2022","4":"PHY"},{"1":"21","2":"34","3":"2022","4":"PHY"},{"1":"22","2":"83","3":"2022","4":"PHY"},{"1":"23","2":"70","3":"2022","4":"PHY"},{"1":"24","2":"46","3":"2022","4":"PHY"},{"1":"25","2":"63","3":"2022","4":"PHY"},{"1":"26","2":"74","3":"2022","4":"PHY"},{"1":"27","2":"81","3":"2022","4":"PHY"},{"1":"28","2":"33","3":"2022","4":"PHY"},{"1":"29","2":"56","3":"2022","4":"PHY"},{"1":"30","2":"47","3":"2022","4":"PHY"},{"1":"31","2":"46","3":"2022","4":"PHY"},{"1":"32","2":"41","3":"2022","4":"PHY"},{"1":"33","2":"87","3":"2022","4":"PHY"},{"1":"34","2":"61","3":"2022","4":"PHY"},{"1":"35","2":"35","3":"2022","4":"PHY"},{"1":"36","2":"49","3":"2022","4":"PHY"},{"1":"37","2":"52","3":"2022","4":"PHY"},{"1":"38","2":"57","3":"2022","4":"PHY"},{"1":"39","2":"61","3":"2022","4":"PHY"},{"1":"40","2":"78","3":"2022","4":"PHY"},{"1":"41","2":"57","3":"2022","4":"PHY"},{"1":"42","2":"42","3":"2022","4":"PHY"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>HSPhy_2023_StateItemDF<span class="ot">&lt;-</span><span class="fu">read_state_item</span>(<span class="st">"data/2023_Physics_District_NextGenMCASItem.xlsx"</span>, <span class="dv">2023</span>, <span class="st">"PHY"</span> )</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>HSPhy_2023_StateItemDF</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["ITEM"],"name":[1],"type":["int"],"align":["right"]},{"label":["State%"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Year"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Subject"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"87","3":"2023","4":"PHY"},{"1":"2","2":"67","3":"2023","4":"PHY"},{"1":"3","2":"63","3":"2023","4":"PHY"},{"1":"4","2":"62","3":"2023","4":"PHY"},{"1":"5","2":"64","3":"2023","4":"PHY"},{"1":"6","2":"69","3":"2023","4":"PHY"},{"1":"7","2":"60","3":"2023","4":"PHY"},{"1":"8","2":"60","3":"2023","4":"PHY"},{"1":"9","2":"67","3":"2023","4":"PHY"},{"1":"10","2":"70","3":"2023","4":"PHY"},{"1":"11","2":"51","3":"2023","4":"PHY"},{"1":"12","2":"51","3":"2023","4":"PHY"},{"1":"13","2":"46","3":"2023","4":"PHY"},{"1":"14","2":"36","3":"2023","4":"PHY"},{"1":"15","2":"38","3":"2023","4":"PHY"},{"1":"16","2":"60","3":"2023","4":"PHY"},{"1":"17","2":"46","3":"2023","4":"PHY"},{"1":"18","2":"61","3":"2023","4":"PHY"},{"1":"19","2":"67","3":"2023","4":"PHY"},{"1":"20","2":"42","3":"2023","4":"PHY"},{"1":"21","2":"34","3":"2023","4":"PHY"},{"1":"22","2":"84","3":"2023","4":"PHY"},{"1":"23","2":"66","3":"2023","4":"PHY"},{"1":"24","2":"61","3":"2023","4":"PHY"},{"1":"25","2":"59","3":"2023","4":"PHY"},{"1":"26","2":"73","3":"2023","4":"PHY"},{"1":"27","2":"62","3":"2023","4":"PHY"},{"1":"28","2":"66","3":"2023","4":"PHY"},{"1":"29","2":"53","3":"2023","4":"PHY"},{"1":"30","2":"58","3":"2023","4":"PHY"},{"1":"31","2":"42","3":"2023","4":"PHY"},{"1":"32","2":"54","3":"2023","4":"PHY"},{"1":"33","2":"71","3":"2023","4":"PHY"},{"1":"34","2":"41","3":"2023","4":"PHY"},{"1":"35","2":"71","3":"2023","4":"PHY"},{"1":"36","2":"57","3":"2023","4":"PHY"},{"1":"37","2":"34","3":"2023","4":"PHY"},{"1":"38","2":"64","3":"2023","4":"PHY"},{"1":"39","2":"66","3":"2023","4":"PHY"},{"1":"40","2":"53","3":"2023","4":"PHY"},{"1":"41","2":"69","3":"2023","4":"PHY"},{"1":"42","2":"36","3":"2023","4":"PHY"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="school-item-analysis-reports" class="level2">
+<h2 class="anchored" data-anchor-id="school-item-analysis-reports">School Item Analysis Reports</h2>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -468,31 +513,51 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Data Cleaning"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">    df-print: paged</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-copy: true</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="an">editor:</span><span class="co"> </span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">  markdown: </span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">    wrap: 72</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu"># Read in Next Gen Test Item data sets</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'dependencies.R'</span>)</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Data Cleaning"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">    df-print: paged</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-copy: true</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="an">editor:</span><span class="co"> </span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">  markdown: </span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">    wrap: 72</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="fu"># Load libraries</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>, <span class="at">warning=</span><span class="cn">FALSE</span>, <span class="at">message=</span><span class="cn">FALSE</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'dependencies.R'</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="fu"># Read in Data Sets</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="fu">## State Item Analysis Report</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>HSPhy_2022_StateItemDF<span class="ot">&lt;-</span><span class="fu">read_state_item</span>(<span class="st">"data/2022_Physics_District_NextGenMCASItem.xlsx"</span>, <span class="dv">2022</span>, <span class="st">"PHY"</span> )</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>HSPhy_2022_StateItemDF</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>HSPhy_2023_StateItemDF<span class="ot">&lt;-</span><span class="fu">read_state_item</span>(<span class="st">"data/2023_Physics_District_NextGenMCASItem.xlsx"</span>, <span class="dv">2023</span>, <span class="st">"PHY"</span> )</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>HSPhy_2023_StateItemDF</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## School Item Analysis Reports</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

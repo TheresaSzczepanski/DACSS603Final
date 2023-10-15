@@ -25,6 +25,20 @@
     "href": "data_cleaning.html",
     "title": "Data Cleaning",
     "section": "",
-    "text": "Read in Next Gen Test Item data sets\n\n\nCode\nsource('dependencies.R')"
+    "text": "Code\nknitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)\nsource('dependencies.R')"
+  },
+  {
+    "objectID": "data_cleaning.html#state-item-analysis-report",
+    "href": "data_cleaning.html#state-item-analysis-report",
+    "title": "Data Cleaning",
+    "section": "State Item Analysis Report",
+    "text": "State Item Analysis Report\n\n\nCode\nHSPhy_2022_StateItemDF&lt;-read_state_item(\"data/2022_Physics_District_NextGenMCASItem.xlsx\", 2022, \"PHY\" )\n\nHSPhy_2022_StateItemDF\n\n\n\n\n  \n\n\n\nCode\nHSPhy_2023_StateItemDF&lt;-read_state_item(\"data/2023_Physics_District_NextGenMCASItem.xlsx\", 2023, \"PHY\" )\n\nHSPhy_2023_StateItemDF"
+  },
+  {
+    "objectID": "data_cleaning.html#school-item-analysis-reports",
+    "href": "data_cleaning.html#school-item-analysis-reports",
+    "title": "Data Cleaning",
+    "section": "School Item Analysis Reports",
+    "text": "School Item Analysis Reports"
   }
 ]
