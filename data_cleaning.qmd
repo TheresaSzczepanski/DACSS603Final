@@ -37,6 +37,8 @@ HSPhy_2023_StateItemDF<-read_state_item("data/2023_Physics_District_NextGenMCASI
 
 HSPhy_2023_StateItemDF
 
+
+
 ```
 
 ## School Item Analysis Reports
@@ -57,6 +59,21 @@ HSPhy_2023_SchoolItemDF
 HSPhy_2023_SchoolItemDF<-HSPhy_2023_SchoolItemDF%>%
   left_join(HSPhy_2023_StateItemDF, by= c('Year'='Year', 'Subject'='Subject', 'ITEM' = 'ITEM'))%>%
   mutate(`School-State Diff` = `School%`- `State%`)
+
+HSPhy_2023_SchoolItemDF
+
+tail(HSPhy_2023_SchoolItemDF)
+
+tail(HSPhy_2022_SchoolItemDF)
+
+HSPhy_NextGen_SchoolItemDF <- rbind(HSPhy_2022_SchoolItemDF, HSPhy_2023_SchoolItemDF)
+
+HSPhy_NextGen_SchoolItemDF
+
+
+
+
+
 
 ```
 
@@ -94,9 +111,35 @@ IT301_2023
 
 NextGenIT301<- rbind(IT301_2022, IT301_2023)
 
-NextGenIT301<-NextGenIT301%>%
+HSPhy_NextGenIT301<-NextGenIT301%>%
   left_join(SG9_standardXWalk, by = "Standard")
 
-NextGenIT301
+HSPhy_NextGenIT301
+
+```
+
+## Join IT301 reports to SchoolItem performance Reports
+
+```{r}
+HSPhy_NextGen_SchoolIT301DF <- left_join(HSPhy_NextGen_SchoolItemDF, HSPhys_NextGenIT301, by = c("Year" = "Year", "Subject" = "Subject", "ITEM" = "ITEM"))
+
+HSPhy_NextGen_SchoolIT301DF
+
+
+```
+
+## Join State Achievement Report to SchooIT301 Reports
+
+```{r}
+HSPhy_NextGen_PerfDF<- HSPhy_NextGen_StateAchievementDF%>%
+  select(`Year`, `Subject`, `School Code`, `Tested Students`, `Performance Level`, `Performance Count`, `Performance%`, `State Performance%`, `Avg. Scaled Score`, `State Avg. Scaled Score`)%>%
+  left_join(HSPhy_NextGen_SchoolIT301DF, by = c("Year" = "Year", "Subject" = "Subject", "School Code" = "School Code"))
+
+HSPhy_NextGen_PerfDF%>%
+  mutate(`Tested` = max(`Tested Students.x`, `Tested Students.y`, na.rm = TRUE))%>%
+  mutate(`Tested Diff` = `Tested Students.x` - `Tested Students.y`)%>%
+  group_by(`School Name`)%>%
+  summarise(`Diff Sum` = sum(`Tested Diff`, na.rm = TRUE),
+            `Tested` = sum(`Tested`))
 
 ```
