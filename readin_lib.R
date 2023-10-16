@@ -56,6 +56,7 @@ read_state_achievement<-function(file_path, year, subject){
                                                  "PM" = "PM",
                                                  "NM" = "NM",
                                                  .ordered = TRUE))%>%
+      mutate(`State Avg. Scaled Score` = as.numeric(`State Avg. Scaled Score`))%>%
       select(`Performance Level`, `State Performance%`, `State Avg. Scaled Score`)
     #view(state_perf_sum)
     read_excel(file_path, skip = 1, col_names = c("School Name", "School Code", "Subject", 
@@ -97,9 +98,12 @@ read_state_achievement<-function(file_path, year, subject){
       select(`Year`, `Subject`, `School Name`, `School Code`, `Tested Students`, `Performance Level`, 
              `Performance Count`, `Performance%`, `Avg. Scaled Score`)%>%
       left_join(state_perf_sum, by= "Performance Level")%>%
+      mutate(`State Performance%` = as.numeric(`State Performance%`))%>%
+      mutate(`Performance Diff` = `Performance%` - `State Performance%`)%>%
       select(`Year`, `Subject`, `School Name`, `School Code`, `Tested Students`, 
-             `Performance Level`, `Performance Count`, `Performance%`, `State Performance%`, 
-             `Avg. Scaled Score`, `State Avg. Scaled Score`)
+             `Performance Level`, `Performance Count`, `Performance%`, `State Performance%`, `Performance Diff`,
+             `Avg. Scaled Score`, `State Avg. Scaled Score`)%>%
+      filter(`School Code` != "00000000")
     
   }
 }

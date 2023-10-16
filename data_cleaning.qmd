@@ -88,7 +88,7 @@ HSPhy_2023_StateAchievementDF
 
 HSPhy_NextGen_StateAchievementDF<-rbind(HSPhy_2022_StateAchievementDF, HSPhy_2023_StateAchievementDF)
 
-HSPhy_NextGen_StateAchievementDF
+
 
 
 ```
@@ -118,17 +118,20 @@ HSPhy_NextGenIT301
 
 ```
 
-## Join IT301 reports to SchoolItem performance Reports
+## Join IT301 Summary reports to SchoolItem performance Reports
 
 ```{r}
 HSPhy_NextGen_SchoolIT301DF <- left_join(HSPhy_NextGen_SchoolItemDF, HSPhy_NextGenIT301, by = c("Year" = "Year", "Subject" = "Subject", "ITEM" = "ITEM"))
 
 HSPhy_NextGen_SchoolIT301DF
-
+view(HSPhy_NextGen_SchoolIT301DF)
+length(unique(HSPhy_NextGen_SchoolIT301DF$`School Name`))
 
 ```
 
 ## Compute Key Summary Stats for IT301 Reports
+
+Data of 112 schools performance on Next Generation HS Introductory Physics exam in Spring of 2022 and Spring of 2023. 87 of those schools tested students in both years and 25 of those schools only tested students in 1 of the 2 testing years.
 ```{r}
 ## Compute % Earned by Practice Category
 ## Compute State % Earned by Practice Category
@@ -138,19 +141,39 @@ HSPhy_NextGen_SchoolIT301DF
 
 Practice_Cat_Sum <- HSPhy_NextGen_SchoolIT301DF%>%
   group_by(`Practice Category`)%>%
-  summarise(`Mean Diff` = mean(`School-State Diff`),
-            `Med Diff` = median(`School-State Diff`),
-            `SD Diff` = sd(`School-State Diff`))
+  summarise(`PC Mean Diff` = mean(`School-State Diff`),
+            `PC Med Diff` = median(`School-State Diff`),
+            `PC SD Diff` = sd(`School-State Diff`))
 
 Practice_Cat_Sum
 
 Practice_Cat_School_Sum <- HSPhy_NextGen_SchoolIT301DF%>%
-  group_by(`School Name`, `Practice Category`)%>%
-  summarise(`Mean Diff` = mean(`School-State Diff`),
-            `Med Diff` = median(`School-State Diff`),
-            `SD Diff` = sd(`School-State Diff`))
+  group_by(`School Name`,  `School Code`, `Practice Category`)%>%
+  summarise(`PC Mean Diff` = mean(`School-State Diff`),
+            `PC Med Diff` = median(`School-State Diff`),
+            `PC SD Diff` = sd(`School-State Diff`))
 
 Practice_Cat_School_Sum
+
+
+Reporting_Cat_Sum <- HSPhy_NextGen_SchoolIT301DF%>%
+  group_by(`Reporting Category`)%>%
+  summarise(`RC Mean Diff` = mean(`School-State Diff`),
+            `RC Med Diff` = median(`School-State Diff`),
+            `RC SD Diff` = sd(`School-State Diff`))
+
+Reporting_Cat_Sum
+
+Reporting_Cat_School_Sum <- HSPhy_NextGen_SchoolIT301DF%>%
+  group_by(`School Name`,  `School Code`, `Reporting Category`)%>%
+  summarise(`RC Mean Diff` = mean(`School-State Diff`),
+            `RC Med Diff` = median(`School-State Diff`),
+            `RC SD Diff` = sd(`School-State Diff`))
+
+
+Reporting_Cat_School_Sum
+
+
 
 
 
