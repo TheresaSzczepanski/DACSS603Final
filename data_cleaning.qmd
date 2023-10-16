@@ -121,25 +121,58 @@ HSPhy_NextGenIT301
 ## Join IT301 reports to SchoolItem performance Reports
 
 ```{r}
-HSPhy_NextGen_SchoolIT301DF <- left_join(HSPhy_NextGen_SchoolItemDF, HSPhys_NextGenIT301, by = c("Year" = "Year", "Subject" = "Subject", "ITEM" = "ITEM"))
+HSPhy_NextGen_SchoolIT301DF <- left_join(HSPhy_NextGen_SchoolItemDF, HSPhy_NextGenIT301, by = c("Year" = "Year", "Subject" = "Subject", "ITEM" = "ITEM"))
 
 HSPhy_NextGen_SchoolIT301DF
 
 
 ```
 
-## Join State Achievement Report to SchooIT301 Reports
+## Compute Key Summary Stats for IT301 Reports
+```{r}
+## Compute % Earned by Practice Category
+## Compute State % Earned by Practice Category
+## Compute SD by Practice Category
+## Compute State % Earned by Reporting Category
+## Compute SD by Reporting Category
+
+Practice_Cat_Sum <- HSPhy_NextGen_SchoolIT301DF%>%
+  group_by(`Practice Category`)%>%
+  summarise(`Mean Diff` = mean(`School-State Diff`),
+            `Med Diff` = median(`School-State Diff`),
+            `SD Diff` = sd(`School-State Diff`))
+
+Practice_Cat_Sum
+
+Practice_Cat_School_Sum <- HSPhy_NextGen_SchoolIT301DF%>%
+  group_by(`School Name`, `Practice Category`)%>%
+  summarise(`Mean Diff` = mean(`School-State Diff`),
+            `Med Diff` = median(`School-State Diff`),
+            `SD Diff` = sd(`School-State Diff`))
+
+Practice_Cat_School_Sum
+
+
+
+```
+
+
+## Join Summary Stats from IT301 Reports to State Achievement Reports
 
 ```{r}
-HSPhy_NextGen_PerfDF<- HSPhy_NextGen_StateAchievementDF%>%
-  select(`Year`, `Subject`, `School Code`, `Tested Students`, `Performance Level`, `Performance Count`, `Performance%`, `State Performance%`, `Avg. Scaled Score`, `State Avg. Scaled Score`)%>%
-  left_join(HSPhy_NextGen_SchoolIT301DF, by = c("Year" = "Year", "Subject" = "Subject", "School Code" = "School Code"))
+#HSPhy_NextGen_PerfDF<- HSPhy_NextGen_StateAchievementDF%>%
+#  select(`Year`, `Subject`, `School Code`, `Tested Students`, `Performance Level`, `Performance #Count`, `Performance%`, `State Performance%`, `Avg. Scaled Score`, `State Avg. Scaled Score`)%>%
+#  left_join(HSPhy_NextGen_SchoolIT301DF, by = c("Year" = "Year", "Subject" = "Subject", "School #Code" = "School Code", "Tested Students" = "Tested Students"))
 
-HSPhy_NextGen_PerfDF%>%
-  mutate(`Tested` = max(`Tested Students.x`, `Tested Students.y`, na.rm = TRUE))%>%
-  mutate(`Tested Diff` = `Tested Students.x` - `Tested Students.y`)%>%
-  group_by(`School Name`)%>%
-  summarise(`Diff Sum` = sum(`Tested Diff`, na.rm = TRUE),
-            `Tested` = sum(`Tested`))
+#HSPhy_NextGen_PerfDF%>%
+#  select(`Year`, `School Name`, `School Code`, `Tested Students`)%>%
+#  filter(`School Code` == "04120530")
+
+# HSPhy_NextGen_PerfDF%>%
+#   mutate(`Tested` = max(`Tested Students.x`, `Tested Students.y`, na.rm = TRUE))%>%
+#   mutate(`Tested Diff` = `Tested Students.x` - `Tested Students.y`)%>%
+#   group_by(`School Name`)%>%
+#   summarise(`Diff Sum` = sum(`Tested Diff`, na.rm = TRUE),
+#             `Tested` = sum(`Tested`))
 
 ```

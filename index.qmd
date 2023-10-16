@@ -31,7 +31,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 ```
 
 
-# Introduction
+# Research Questions
 
 [@knuth84]
 
@@ -125,5 +125,18 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 -   Are there notable differences in student performance for students
     with and without disabilities?
 :::
+
+# Hypothesis
+
+# Descriptive Statistics
+
+```{r}
+# HSPhy_NextGen_PerfDF
+# HSPhy_NextGen_SchoolIT301DF
+
+```
+
+# Visualization
+
 
 # References
