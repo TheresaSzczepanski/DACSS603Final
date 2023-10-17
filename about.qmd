@@ -25,10 +25,11 @@ and Secondary Education's
 
 | variable               | Measurement Level | Values                                                                                                                                         |
 |------------------|------------------|------------------------------------|
-| `School Code`               | Nominal     | the 8 digit identifier code for a school                                                                 |
-| `School Name`               | Nominal     | the name of a school                                                                 |
-| `Tested Students`     | Discrete           | number of students form a school that completed the MCAS assessment                                                                                                                 |
+| `Tested Students`     | Discrete           | number of students from a school that completed the MCAS assessment                                                                                                                 |
 | `School Size`     | Ordinal           | classification of size of school based on number of students that completed the HS Physics MCAS exam                                                                                                                 |
+|                        |                   | `Small`: 50 or less students                                                                                                                              |
+|                        |                   | `Medium`: 50-150                                                                                                                                         |
+|                        |                   | `Large`: More than 150
 | `Practice Category Pts`   | Discrete           | The number of points available for items in a given scientific practice category                                                                                                                       |
 |                        |                   | `EVR Pts`: Evidence, Reasoning, and Modeling                                                                                                                              |
 |                        |                   | `MD Pts`: Mathematics and Data                                                                                                                                         |
@@ -51,8 +52,6 @@ and Secondary Education's
 |                        |                   | `EVR Diff`: Evidence, Reasoning, and Modeling                                                                                                                              |
 |                        |                   | `MD Diff`: Mathematics and Data                                                                                                                                         |
 |                        |                   | `IQ Diff`: Investigations and Questioning                                                                                                                                        |
-| `sitem`                | Nominal           | The question number the MCAS exam                                                                                                              |
-| `sitem_score`          | Discrete          | The number of points a student earned on a given `sitem`                                                                                       |
 | `Performance Level Count`| Discrete           | The number of student's at a school at each [performance level](https://www.doe.mass.edu/mcas/tdd/pld/)                                                                      |
 |                        |                   | `E Count`: Exceeds Expectations                                                                                                                           |
 |                        |                   | `M Count`: Meets Expectations                                                                                                                             |
@@ -70,6 +69,8 @@ and Secondary Education's
 |                        |                   | `State NM%` Does Not Meet Expectations                                                                                                                     |
 | `Avg. Scaled Score`   | Discrete          | The [school's average scaled score](https://www.doe.mass.edu/mcas/parents/pgreport/ghs-english.pdf)  |
 | `State Avg. Scaled Score`| Discrete        | The [average scaled score across all students in MA](https://www.doe.mass.edu/mcas/growth/default.html)        |
+| `School Code`               | Nominal     | the 8 digit identifier code for a school                                                                 |
+| `School Name`               | Nominal     | the name of a school                                                                 |
 
 
 
