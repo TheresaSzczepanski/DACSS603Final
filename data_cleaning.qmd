@@ -169,7 +169,7 @@ HSPhy_NextGenIT301
 HSPhy_NextGen_PCSum<-HSPhy_NextGenIT301%>%
  group_by(`Practice Category`)%>%
   summarise(`Practice Cat Pts` = sum(`Item Possible Points`),
-          `State Practice Cat Pts` = sum(`Item Possible Points`*`State%` ))%>%
+          `State Practice Cat Pts` = sum(`Item Possible Points`*`State%`/100 ))%>%
     mutate(`State Practice Cat%` = round(100*`State Practice Cat Pts`/ `Practice Cat Pts`))%>%
   select(`Practice Category`, `State Practice Cat%`)%>%
   pivot_wider(names_from = `Practice Category`, values_from = `State Practice Cat%`)%>%
@@ -186,7 +186,7 @@ HSPhy_NextGen_PCSum
 HSPhy_NextGen_RCSum<-HSPhy_NextGenIT301%>%
  group_by(`Reporting Category`)%>%
   summarise(`Report Cat Pts` = sum(`Item Possible Points`),
-          `State Report Cat Pts` = sum(`Item Possible Points`*`State%` ))%>%
+          `State Report Cat Pts` = sum(`Item Possible Points`*`State%`/100 ))%>%
     mutate(`State Report Cat%` = round(100*`State Report Cat Pts`/ `Report Cat Pts`))%>%
   select(`Reporting Category`, `State Report Cat%`)%>%
   pivot_wider(names_from = `Reporting Category`, values_from = `State Report Cat%`)%>%
@@ -201,7 +201,8 @@ HSPhy_NextGen_RCSum
 HSPhy_NextGen_CatSum <- left_join(HSPhy_NextGen_RCSum, HSPhy_NextGen_PCSum, by = "Subject")
 HSPhy_NextGen_CatSum
 
-HSPhy_NextGen_SumDF<-left_join(HSPhy_NextGen_AchSumDF, HSPhy_NextGen_CatSum, by = "Subject")
+HSPhy_NextGen_SumDF<-left_join(HSPhy_NextGen_AchSumDF, HSPhy_NextGen_CatSum, by = "Subject")%>%
+  select(!contains("Name"))
 
 HSPhy_NextGen_SumDF
 
@@ -216,78 +217,78 @@ HSPhy_NextGen_SumDF
 HSPhy_NextGen_SchoolIT301DF <- left_join(HSPhy_NextGen_SchoolItemDF, HSPhy_NextGenIT301, by = c("Year" = "Year", "Subject" = "Subject", "ITEM" = "ITEM", "State%" = "State%"))
 
 HSPhy_NextGen_SchoolIT301DF
-view(HSPhy_NextGen_SchoolIT301DF)
+#view(HSPhy_NextGen_SchoolIT301DF)
 length(unique(HSPhy_NextGen_SchoolIT301DF$`School Name`))
+
+# Create Summary of Practice Categories by School Data Frame
 
 HSPhy_NextGen_SchoolPCSum<-HSPhy_NextGen_SchoolIT301DF%>%
   group_by(`Practice Category`, `School Code`, `School Name`)%>%
   summarise(`Practice Cat Pts` = sum(`Item Possible Points`),
           `State Practice Cat Pts` = sum(`Item Possible Points`*`State%`/100 ),
+          `Practice Cat Diff SD` = sd(`School-State Diff`, na.rm = TRUE),
           `School Practice Cat Pts` = sum(`Item Possible Points`*`School%`/100))%>%
     mutate(`State Practice Cat%` = round(100*`State Practice Cat Pts`/ `Practice Cat Pts`))%>%
   mutate(`School Practice Cat%` = round(100*`School Practice Cat Pts`/ `Practice Cat Pts`))%>%
-  select(`School Name`, `School Code`, `Practice Category`, `School Practice Cat%`)%>%
-  pivot_wider(names_from = `Practice Category`, values_from = `School Practice Cat%`)%>%
-  mutate(`MD%` =`B. Mathematics and Data`) %>%
-  mutate(`IQ%` = `A. Investigations and Questioning`)%>%
-  mutate(`ERM%` =`C. Evidence, Reasoning, and Modeling`)%>%
-  mutate(`None%` = `None`)%>%
+  select(`School Name`, `School Code`, `Practice Category`, `School Practice Cat%`, `Practice Cat Diff SD`)%>%
+  pivot_wider(names_from = `Practice Category`, values_from = c(`School Practice Cat%`, `Practice Cat Diff SD`))%>%
+  mutate(`MD%` =`School Practice Cat%_B. Mathematics and Data`) %>%
+  mutate(`IQ%` = `School Practice Cat%_A. Investigations and Questioning`)%>%
+  mutate(`ERM%` =`School Practice Cat%_C. Evidence, Reasoning, and Modeling`)%>%
+  mutate(`None%` = `School Practice Cat%_None`)%>%
   mutate(`Subject` = "PHY")%>%
-  select(`Subject`, `School Name`, `School Code`, `IQ%`, `MD%`, `ERM%`, `None%`)
+  mutate(`MD Diff SD` =round(`Practice Cat Diff SD_B. Mathematics and Data`,2)) %>%
+  mutate(`IQ Diff SD` = round(`Practice Cat Diff SD_A. Investigations and Questioning`,2))%>%
+  mutate(`ERM Diff SD` =round(`Practice Cat Diff SD_C. Evidence, Reasoning, and Modeling`,2))%>%
+  mutate(`None Diff SD` = round(`Practice Cat Diff SD_None`,2))%>%
+  mutate(`Subject` = "PHY")%>%
+  select(`Subject`, `School Name`, `School Code`, `IQ%`, `MD%`, `ERM%`, `None%`,
+         `IQ Diff SD`, `MD Diff SD`, `ERM Diff SD`, `None Diff SD`)
 
-HSPhy_NextGen_SchoolPCSum
+#view(HSPhy_NextGen_SchoolPCSum)
+
+
+# Create Summary by Reporting Category Data Frame
+HSPhy_NextGen_SchoolRCSum<-HSPhy_NextGen_SchoolIT301DF%>%
+  group_by(`Reporting Category`, `School Code`, `School Name`)%>%
+  summarise(`Report Cat Pts` = sum(`Item Possible Points`),
+          `State Report Cat Pts` = sum(`Item Possible Points`*`State%`/100 ),
+          `Report Cat Diff SD` = sd(`School-State Diff`, na.rm = TRUE),
+          `School Report Cat Pts` = sum(`Item Possible Points`*`School%`/100))%>%
+    mutate(`State Report Cat%` = round(100*`State Report Cat Pts`/ `Report Cat Pts`))%>%
+  mutate(`School Report Cat%` = round(100*`School Report Cat Pts`/ `Report Cat Pts`))%>%
+  select(`School Name`, `School Code`, `Reporting Category`, `School Report Cat%`, `Report Cat Diff SD`)%>%
+  pivot_wider(names_from = `Reporting Category`, values_from = c(`School Report Cat%`, `Report Cat Diff SD`))%>%
+  mutate(`EN%` =`School Report Cat%_EN`) %>%
+  mutate(`MF%` = `School Report Cat%_MF`)%>%
+  mutate(`WA%` =`School Report Cat%_WA`)%>%
+  mutate(`Subject` = "PHY")%>%
+  mutate(`EN Diff SD` =round(`Report Cat Diff SD_EN`,2)) %>%
+  mutate(`MF Diff SD` = round(`Report Cat Diff SD_MF`,2))%>%
+  mutate(`WA Diff SD` =round(`Report Cat Diff SD_WA`,2))%>%
+  mutate(`Subject` = "PHY")%>%
+  select(`Subject`, `School Name`, `School Code`, `EN%`, `MF%`, `WA%`,
+         `EN Diff SD`, `MF Diff SD`, `WA Diff SD`)
+
+view(HSPhy_NextGen_SchoolRCSum)
+
+HSPhy_NextGen_SchoolCatSum <- left_join(HSPhy_NextGen_SchoolRCSum, HSPhy_NextGen_SchoolPCSum, by = c("Subject" = "Subject", "School Name" = "School Name", "School Code" = "School Code"))
+
+HSPhy_NextGen_SchoolCatSum
+
+HSPhy_NextGen_SchoolSum <-left_join(HSPhy_NextGen_SchoolCatSum, HSPhy_NextGen_SumDF,
+                                    by = c("Subject"="Subject",
+                                           "School Code" = "School Code"))
+
+HSPhy_NextGen_SchoolSum
+
 
 ```
 
 ## Compute Key Summary Stats for IT301 Reports
 
 Data of 112 schools performance on Next Generation HS Introductory Physics exam in Spring of 2022 and Spring of 2023. 87 of those schools tested students in both years and 25 of those schools only tested students in 1 of the 2 testing years.
-```{r}
-## Compute % Earned by Practice Category
-## Compute State % Earned by Practice Category
-## Compute SD by Practice Category
-## Compute State % Earned by Reporting Category
-## Compute SD by Reporting Category
 
-Practice_Cat_Sum <- HSPhy_NextGen_SchoolIT301DF%>%
-  group_by(`Practice Category`)%>%
-  summarise(`PC Mean Diff` = mean(`School-State Diff`),
-            `PC Med Diff` = median(`School-State Diff`),
-            `PC SD Diff` = sd(`School-State Diff`))
-
-Practice_Cat_Sum
-
-Practice_Cat_School_Sum <- HSPhy_NextGen_SchoolIT301DF%>%
-  group_by(`School Name`,  `School Code`, `Practice Category`)%>%
-  summarise(`PC Mean Diff` = mean(`School-State Diff`),
-            `PC Med Diff` = median(`School-State Diff`),
-            `PC SD Diff` = sd(`School-State Diff`))
-
-Practice_Cat_School_Sum
-
-
-Reporting_Cat_Sum <- HSPhy_NextGen_SchoolIT301DF%>%
-  group_by(`Reporting Category`)%>%
-  summarise(`RC Mean Diff` = mean(`School-State Diff`),
-            `RC Med Diff` = median(`School-State Diff`),
-            `RC SD Diff` = sd(`School-State Diff`))
-
-Reporting_Cat_Sum
-
-Reporting_Cat_School_Sum <- HSPhy_NextGen_SchoolIT301DF%>%
-  group_by(`School Name`,  `School Code`, `Reporting Category`)%>%
-  summarise(`RC Mean Diff` = mean(`School-State Diff`),
-            `RC Med Diff` = median(`School-State Diff`),
-            `RC SD Diff` = sd(`School-State Diff`))
-
-
-Reporting_Cat_School_Sum
-
-
-
-
-
-```
 
 
 ## State E below average with Practice Category
@@ -319,105 +320,9 @@ LowEPractice%>%
 ```
 
 
-## State E above average with Practice Category
-
-```{r}
-HSPhy_NextGen_StateAchievementDF
-
-HighEStateDF<- HSPhy_NextGen_StateAchievementDF%>%
-  filter(`Performance Level` == "E")%>%
-  filter(`Performance Diff` > 0)%>%
-  mutate(`ELow` = FALSE)
-
-HighEStateDF
-#view(HighEStateDF)
-
-HighEPractice<-HighEStateDF%>%
-  select(`Year`, `Subject`, `School Code`, `Tested Students`, `Performance Level`, `Performance Count`, `Performance%`, `State Performance%`, `Performance Diff`, `Avg. Scaled Score`, `State Avg. Scaled Score`)%>%
-  left_join(Practice_Cat_School_Sum, by = c( "School Code" = "School Code"))%>%
-  select(`Year`, `School Name`, `School Code`, `Tested Students`, `Performance Level`, `Performance Count`, `Performance%`, `State Performance%`, `Performance Diff`, `Avg. Scaled Score`, 
-         `State Avg. Scaled Score`, `Practice Category`, `PC Mean Diff`, `PC Med Diff`, `PC SD Diff`)
-
-HighEPractice%>%
-  group_by(`Practice Category`)%>%
-  summarise(`High E PC Mean Diff` = mean(`PC Mean Diff`, na.rm = TRUE),
-            `High E PC Med Diff` = median(`PC Med Diff`, na.rm = TRUE),
-            `High E PC SD Diff` = sd(`PC SD Diff`, na.rm = TRUE)
-            )
-```
 
 
-## State E and M above average
-
-```{r}
-HSPhy_NextGen_StateAchievementDF
-
-HighMEStateDF<- HSPhy_NextGen_StateAchievementDF%>%
-  filter(`Performance Level` == "E" | `Performance Level` == "M")%>%
-  filter(`Performance Diff` > 0)%>%
-  mutate(`MELow` = FALSE)
-
-HighMEStateDF
-#view(HighEStateDF)
-
-HighMEPractice<-HighMEStateDF%>%
-  select(`Year`, `Subject`, `School Code`, `Tested Students`, `Performance Level`, `Performance Count`, `Performance%`, `State Performance%`, `Performance Diff`, `Avg. Scaled Score`, `State Avg. Scaled Score`)%>%
-  left_join(Practice_Cat_School_Sum, by = c( "School Code" = "School Code"))%>%
-  select(`Year`, `School Name`, `School Code`, `Tested Students`, `Performance Level`, `Performance Count`, `Performance%`, `State Performance%`, `Performance Diff`, `Avg. Scaled Score`, 
-         `State Avg. Scaled Score`, `Practice Category`, `PC Mean Diff`, `PC Med Diff`, `PC SD Diff`)
-
-HighMEPractice%>%
-  group_by(`Practice Category`)%>%
-  summarise(`High ME PC Mean Diff` = mean(`PC Mean Diff`, na.rm = TRUE),
-            `High ME PC Med Diff` = median(`PC Med Diff`, na.rm = TRUE),
-            `High ME PC SD Diff` = sd(`PC SD Diff`, na.rm = TRUE)
-            )
-```
 
 
-## State E or M below average
 
 
-```{r}
-HSPhy_NextGen_StateAchievementDF
-
-LowMEStateDF<- HSPhy_NextGen_StateAchievementDF%>%
-  filter(`Performance Level` == "E" | `Performance Level` == "M")%>%
-  filter(`Performance Diff` < 0)%>%
-  mutate(`MELow` = FALSE)
-
-LowMEStateDF
-#view(LowEStateDF)
-
-LowMEPractice<-LowMEStateDF%>%
-  select(`Year`, `Subject`, `School Code`, `Tested Students`, `Performance Level`, `Performance Count`, `Performance%`, `State Performance%`, `Performance Diff`, `Avg. Scaled Score`, `State Avg. Scaled Score`)%>%
-  left_join(Practice_Cat_School_Sum, by = c( "School Code" = "School Code"))%>%
-  select(`Year`, `School Name`, `School Code`, `Tested Students`, `Performance Level`, `Performance Count`, `Performance%`, `State Performance%`, `Performance Diff`, `Avg. Scaled Score`, 
-         `State Avg. Scaled Score`, `Practice Category`, `PC Mean Diff`, `PC Med Diff`, `PC SD Diff`)
-
-LowMEPractice%>%
-  group_by(`Practice Category`)%>%
-  summarise(`Low ME PC Mean Diff` = mean(`PC Mean Diff`, na.rm = TRUE),
-            `Low ME PC Med Diff` = median(`PC Med Diff`, na.rm = TRUE),
-            `Low ME PC SD Diff` = sd(`PC SD Diff`, na.rm = TRUE)
-            )
-```
-
-
-## State E below, M above
-
-```{r}
-HSPhy_NextGen_StateAchievementDF
-
-LowEHighMStateDF<-HSPhy_NextGen_StateAchievementDF%>%
-  mutate(`MHigh` = case_when(`Performance Level` == "M" & `Performance Diff` >= 0 ~ TRUE,
-                             `Performance Level` == "M" & `Performance Diff` < 0 ~ FALSE))%>%
-  mutate(`ELow` = case_when(`Performance Level` == "E" & `Performance Diff` < 0 ~ TRUE,
-                            `Performance Level` == "E" & `Performance Diff` >= 0 ~ FALSE))%>%
-  mutate(`EMOpp` = case_when(`MHigh` == TRUE && `ELow` == TRUE ~ TRUE))#%>%
-  #filter(`EMOpp` == TRUE)#%>%
-  #filter(`MHigh` == TRUE)
-  
-
-view(LowEHighMStateDF)
-```
