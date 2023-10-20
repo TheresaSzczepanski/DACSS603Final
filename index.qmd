@@ -130,9 +130,13 @@ is negatively associated with variance in Mathematics and Data items.
 
 # Descriptive Statistics
 
+Data of 112 schools performance on Next Generation HS Introductory Physics exam in Spring of 2022 and Spring of 2023. 87 of those schools tested students in both years and 25 of those schools only tested students in 1 of the 2 testing years.
+
 ```{r}
 # HSPhy_NextGen_PerfDF
 # HSPhy_NextGen_SchoolIT301DF
+
+#HSPhy_NextGen_SchoolSum
 
 ```
 
