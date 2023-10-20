@@ -17,16 +17,18 @@ read_IT301 <- function(file_path, year, subject){
                                                    "delete",
                                                    "State%", "District-State Diff"))%>%
       select(`ITEM`, `Item Type`, `Reporting Category`, `Standard`, `Item Desc`,
-             `Practice Category`, `Item Possible Points`)%>%
+             `Practice Category`, `Item Possible Points`, `State%`)%>%
       mutate(`Year` = year)
     IT301_DF<-head(IT301_DF, -5)
     IT301_DF%>%
       mutate(`Item Possible Points` = as.integer(`Item Possible Points`))%>%
       mutate(`ITEM` = as.integer(`ITEM`))%>%
+      mutate(`State%` = round(100*as.numeric(`State%`)))%>%
+      mutate(`State Pts` = `State%`*`Item Possible Points`)%>%
       #na_if(`Practice Category', "None")%>%
       mutate(`Subject` = subject)%>%
       select(`Year`, `Subject`, `ITEM`, `Item Type`, `Standard`, `Reporting Category`,
-             `Practice Category`, `Item Possible Points`, `Item Desc`)
+             `Practice Category`, `Item Possible Points`, `State%`, `Item Desc`)
   }
 }
 
@@ -77,7 +79,7 @@ read_state_achievement<-function(file_path, year, subject){
       mutate(`State Tested` = `E#State` + `M#State` + `PM#State` + `NM#State`)%>%
       select(`Year`, `State Tested`, `E#State`, `E%State`, `M#State`, `M%State`, 
              `PM#State`, `PM%State`, `NM#State`, `NM%State`, `State Avg. Scaled Score`)
-    view(state_perf_sum)
+    #view(state_perf_sum)
     read_excel(file_path, skip = 1, col_names = c("School Name", "School Code", "Subject", 
                                                   "delete", "delete", "E#", "E%", 
                                                   "M#", "M%", "PM#",
@@ -121,7 +123,7 @@ read_state_achievement<-function(file_path, year, subject){
      # mutate(`State Performance%` = as.numeric(`State Performance%`))%>%
       #mutate(`Performance Diff` = `Performance%` - `State Performance%`)%>%
       select(`Year`, `Subject`, `School Name`, `School Code`, `Tested Students`, 
-             `E#`, `E%`, `M#`, `M%`, `PM#`, `PM%`, `NM#`, `NM%`, 
+             `E#`, `E%`, `M#`, `M%`, `PM#`, `PM%`, `NM#`, `NM%`, `State Tested`,
              `E#State`, `E%State`, `M#State`, `M%State`, `PM#State`, `PM%State`, 
              `NM#State`, `NM%State`,
              `Avg. Scaled Score`, `State Avg. Scaled Score`)%>%

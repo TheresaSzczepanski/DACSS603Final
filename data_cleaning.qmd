@@ -148,6 +148,7 @@ HSPhy_NextGen_AchSumDF
 ```{r}
 
 SG9_standardXWalk<-read_excel("data/NextGenMCASItemxWalk.xlsx", sheet = "HS_Phys_StandardxWalk")
+view(SG9_standardXWalk)
 
 IT301_test<-read_excel("data/2023_Physics_IT301 MCAS District and School Test Item Analysis Summary.xlsx", skip = 14)
 IT301_test
@@ -162,7 +163,7 @@ IT301_2023
 NextGenIT301<- rbind(IT301_2022, IT301_2023)
 
 HSPhy_NextGenIT301<-NextGenIT301%>%
-  left_join(SG9_standardXWalk, by = "Standard")
+  left_join(SG9_standardXWalk, by = c("Standard"="Standard"))
 HSPhy_NextGenIT301
 
 HSPhy_NextGen_PCSum<-HSPhy_NextGenIT301%>%
@@ -212,11 +213,29 @@ HSPhy_NextGen_SumDF
 
 
 
-HSPhy_NextGen_SchoolIT301DF <- left_join(HSPhy_NextGen_SchoolItemDF, HSPhy_NextGenIT301, by = c("Year" = "Year", "Subject" = "Subject", "ITEM" = "ITEM"))
+HSPhy_NextGen_SchoolIT301DF <- left_join(HSPhy_NextGen_SchoolItemDF, HSPhy_NextGenIT301, by = c("Year" = "Year", "Subject" = "Subject", "ITEM" = "ITEM", "State%" = "State%"))
 
 HSPhy_NextGen_SchoolIT301DF
 view(HSPhy_NextGen_SchoolIT301DF)
 length(unique(HSPhy_NextGen_SchoolIT301DF$`School Name`))
+
+HSPhy_NextGen_SchoolPCSum<-HSPhy_NextGen_SchoolIT301DF%>%
+  group_by(`Practice Category`, `School Code`, `School Name`)%>%
+  summarise(`Practice Cat Pts` = sum(`Item Possible Points`),
+          `State Practice Cat Pts` = sum(`Item Possible Points`*`State%`/100 ),
+          `School Practice Cat Pts` = sum(`Item Possible Points`*`School%`/100))%>%
+    mutate(`State Practice Cat%` = round(100*`State Practice Cat Pts`/ `Practice Cat Pts`))%>%
+  mutate(`School Practice Cat%` = round(100*`School Practice Cat Pts`/ `Practice Cat Pts`))%>%
+  select(`School Name`, `School Code`, `Practice Category`, `School Practice Cat%`)%>%
+  pivot_wider(names_from = `Practice Category`, values_from = `School Practice Cat%`)%>%
+  mutate(`MD%` =`B. Mathematics and Data`) %>%
+  mutate(`IQ%` = `A. Investigations and Questioning`)%>%
+  mutate(`ERM%` =`C. Evidence, Reasoning, and Modeling`)%>%
+  mutate(`None%` = `None`)%>%
+  mutate(`Subject` = "PHY")%>%
+  select(`Subject`, `School Name`, `School Code`, `IQ%`, `MD%`, `ERM%`, `None%`)
+
+HSPhy_NextGen_SchoolPCSum
 
 ```
 
