@@ -122,10 +122,87 @@ HSPhy_NextGen_SchoolItemDF <- rbind(HSPhy_2022_SchoolItemDF, HSPhy_2023_SchoolIt
 
 
 
+# Create Summary of Practice Categories by School Data Frame
+
+HSPhy_NextGen_SchoolPCSum<-HSPhy_NextGen_SchoolIT301DF%>%
+  group_by(`Practice Category`, `School Code`, `School Name`)%>%
+  summarise(`Practice Cat Pts` = sum(`Item Possible Points`),
+            `State Practice Cat Pts` = sum(`Item Possible Points`*`State%`/100 ),
+            `Practice Cat Diff SD` = sd(`School-State Diff`, na.rm = TRUE),
+            `School Practice Cat Pts` = sum(`Item Possible Points`*`School%`/100))%>%
+  mutate(`State Practice Cat%` = round(100*`State Practice Cat Pts`/ `Practice Cat Pts`))%>%
+  mutate(`School Practice Cat%` = round(100*`School Practice Cat Pts`/ `Practice Cat Pts`))%>%
+  select(`School Name`, `School Code`, `Practice Category`, `School Practice Cat%`, `Practice Cat Diff SD`)%>%
+  pivot_wider(names_from = `Practice Category`, values_from = c(`School Practice Cat%`, `Practice Cat Diff SD`))%>%
+  mutate(`MD%` =`School Practice Cat%_B. Mathematics and Data`) %>%
+  mutate(`IQ%` = `School Practice Cat%_A. Investigations and Questioning`)%>%
+  mutate(`ERM%` =`School Practice Cat%_C. Evidence, Reasoning, and Modeling`)%>%
+  mutate(`None%` = `School Practice Cat%_None`)%>%
+  mutate(`Subject` = "PHY")%>%
+  mutate(`MD Diff SD` =round(`Practice Cat Diff SD_B. Mathematics and Data`,2)) %>%
+  mutate(`IQ Diff SD` = round(`Practice Cat Diff SD_A. Investigations and Questioning`,2))%>%
+  mutate(`ERM Diff SD` =round(`Practice Cat Diff SD_C. Evidence, Reasoning, and Modeling`,2))%>%
+  mutate(`None Diff SD` = round(`Practice Cat Diff SD_None`,2))%>%
+  mutate(`Subject` = "PHY")%>%
+  select(`Subject`, `School Name`, `School Code`, `IQ%`, `MD%`, `ERM%`, `None%`,
+         `IQ Diff SD`, `MD Diff SD`, `ERM Diff SD`, `None Diff SD`)
+
+#view(HSPhy_NextGen_SchoolPCSum)
+
+
+# Create Summary by Reporting Category Data Frame
+HSPhy_NextGen_SchoolRCSum<-HSPhy_NextGen_SchoolIT301DF%>%
+  group_by(`Reporting Category`, `School Code`, `School Name`)%>%
+  summarise(`Report Cat Pts` = sum(`Item Possible Points`),
+            `State Report Cat Pts` = sum(`Item Possible Points`*`State%`/100 ),
+            `Report Cat Diff SD` = sd(`School-State Diff`, na.rm = TRUE),
+            `School Report Cat Pts` = sum(`Item Possible Points`*`School%`/100))%>%
+  mutate(`State Report Cat%` = round(100*`State Report Cat Pts`/ `Report Cat Pts`))%>%
+  mutate(`School Report Cat%` = round(100*`School Report Cat Pts`/ `Report Cat Pts`))%>%
+  select(`School Name`, `School Code`, `Reporting Category`, `School Report Cat%`, `Report Cat Diff SD`)%>%
+  pivot_wider(names_from = `Reporting Category`, values_from = c(`School Report Cat%`, `Report Cat Diff SD`))%>%
+  mutate(`EN%` =`School Report Cat%_EN`) %>%
+  mutate(`MF%` = `School Report Cat%_MF`)%>%
+  mutate(`WA%` =`School Report Cat%_WA`)%>%
+  mutate(`Subject` = "PHY")%>%
+  mutate(`EN Diff SD` =round(`Report Cat Diff SD_EN`,2)) %>%
+  mutate(`MF Diff SD` = round(`Report Cat Diff SD_MF`,2))%>%
+  mutate(`WA Diff SD` =round(`Report Cat Diff SD_WA`,2))%>%
+  mutate(`Subject` = "PHY")%>%
+  select(`Subject`, `School Name`, `School Code`, `EN%`, `MF%`, `WA%`,
+         `EN Diff SD`, `MF Diff SD`, `WA Diff SD`)
+
+#view(HSPhy_NextGen_SchoolRCSum)
+
+HSPhy_NextGen_SchoolCatSum <- left_join(HSPhy_NextGen_SchoolRCSum, HSPhy_NextGen_SchoolPCSum, by = c("Subject" = "Subject", "School Name" = "School Name", "School Code" = "School Code"))
+
+#HSPhy_NextGen_SchoolCatSum
+
+HSPhy_NextGen_SchoolSum <-left_join(HSPhy_NextGen_SchoolCatSum, HSPhy_NextGen_SumDF,
+                                    by = c("Subject"="Subject",
+                                           "School Code" = "School Code"))
+
+
+
+
+
+
 
 
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
 # Create School Size DF
 
 ```{r}

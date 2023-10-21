@@ -163,12 +163,9 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
     practice categories.
 :::
 
-# Descriptive Statistics
 
-Data of 112 schools performance on Next Generation HS Introductory
-Physics exam in Spring of 2022 and Spring of 2023. 87 of those schools
-tested students in both years and 25 of those schools only tested
-students in 1 of the 2 testing years.
+
+# Descriptive Statistics
 
 ```{r}
 #| label: dataframe setup
