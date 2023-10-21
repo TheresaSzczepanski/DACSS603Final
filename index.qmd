@@ -286,18 +286,21 @@ HSPhy_NextGen_SchoolSum%>%
   select(`E%`, `M%`, `PM%`, `NM%`)%>%
   pivot_longer(c(1:4), names_to = "Performance Level", values_to = "% Students")%>%
    ggplot( aes(x=`% Students`, color=`Performance Level`, fill=`Performance Level`)) +
-    geom_histogram(alpha=0.6, binwidth = 15, border=F) +
+    geom_histogram(alpha=0.6, binwidth = 15) +
     scale_fill_viridis(discrete=TRUE) +
     scale_color_viridis(discrete=TRUE) +
-    theme_ipsum() +
+    #theme_ipsum() +
     theme(
       legend.position="none",
       panel.spacing = unit(0.1, "lines"),
       strip.text.x = element_text(size = 8)
     ) +
-    xlab("") +
-    ylab("Assigned Probability (%)") +
-    facet_wrap(~`Performance Level`)
+  
+    facet_wrap(~`Performance Level`)+
+      labs( y = "",
+            title = "Student Performance Level Distribution",
+            x = "% Students at Performance Level",
+            caption = "NextGen HS Physics MCAS")
 
 
 ```
@@ -312,15 +315,18 @@ HSPhy_NextGen_SchoolSum%>%
     geom_histogram(alpha=0.6, binwidth = 3) +
     scale_fill_viridis(discrete=TRUE) +
     scale_color_viridis(discrete=TRUE) +
-    theme_ipsum() +
+    #theme_ipsum() +
     theme(
-      legend.position="none",
       panel.spacing = unit(0.1, "lines"),
       strip.text.x = element_text(size = 8)
     ) +
-    xlab("") +
-    ylab("% Points Earned") +
-    facet_wrap(~`Practice Cat`)
+  
+    facet_wrap(~`Practice Cat`)+
+      labs( y = "% Points Earned",
+            title = "Student Performance by Practice Category",
+            x = "",
+            caption = "NextGen HS Physics MCAS")
+  #ggtitle("Practice Category Performance")
 
 
 ```
@@ -335,16 +341,63 @@ HSPhy_NextGen_SchoolSum%>%
     geom_histogram(alpha=0.6, binwidth = 3) +
     scale_fill_viridis(discrete=TRUE) +
     scale_color_viridis(discrete=TRUE) +
-    theme_ipsum() +
+   # theme_ipsum() +
     theme(
-      legend.position="none",
       panel.spacing = unit(0.1, "lines"),
       strip.text.x = element_text(size = 8)
     ) +
-    xlab("") +
-    ylab("SD Diff") +
+      labs( y = "SD Diff",
+            title = "Student Performance Variation by Practice Category",
+            x = "",
+            caption = "NextGen HS Physics MCAS") +
     facet_wrap(~`Practice Cat`)
 ```
+## Student Performance by Reporting Category
+
+```{r}
+  HSPhy_NextGen_SchoolSum%>%
+  select(`EM Perf Stat`, `MF Diff SD`, `EN Diff SD`, `WA Diff SD` )%>%
+  pivot_longer(c(2:4), names_to = "Report Cat", values_to = "SD Diff")%>%
+  ggplot( aes(x=`SD Diff`, color=`Report Cat`, fill=`Report Cat`)) +
+    geom_histogram(alpha=0.6, binwidth = 3) +
+    scale_fill_viridis(discrete=TRUE) +
+    scale_color_viridis(discrete=TRUE) +
+    #theme_ipsum() +
+    theme(
+      panel.spacing = unit(0.1, "lines"),
+      strip.text.x = element_text(size = 8)
+    ) +
+      labs( y = "SD Diff",
+            title = "Student Performance Variation by Content Reporting Category",
+            x = "",
+            caption = "NextGen HS Physics MCAS") +
+  facet_wrap(~`Report Cat`)
+
+```
+```{r}
+HSPhy_NextGen_SchoolSum%>%
+  select(`EM Perf Stat`, `MF%`, `EN%`, `WA%` )%>%
+  pivot_longer(c(2:4), names_to = "Report Cat", values_to = "% Points")%>%
+ ggplot( aes(x=`% Points`, color=`Report Cat`, fill=`Report Cat`)) +
+    geom_histogram(alpha=0.6, binwidth = 3) +
+    scale_fill_viridis(discrete=TRUE) +
+    scale_color_viridis(discrete=TRUE) +
+    #theme_ipsum() +
+    theme(
+      panel.spacing = unit(0.1, "lines"),
+      strip.text.x = element_text(size = 8)
+    ) +
+  
+    facet_wrap(~`Report Cat`)+
+      labs( y = "% Points Earned",
+            title = "Student Performance by Content Reporting Category",
+            x = "",
+            caption = "NextGen HS Physics MCAS")
+  #ggtitle("Practice Category Performance")
+
+
+```
+
 
 ## Mathematics and Data vs. Evidence Reasoning and Modeling (Practice Category)
 ```{r}
@@ -361,14 +414,21 @@ HSPhy_NextGen_SchoolSum%>%
     geom_boxplot() +
     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
     geom_jitter(color="black", size=0.4, alpha=0.9) +
-    theme_ipsum() +
+    
     theme(
-     
-      plot.title = element_text(size=11)
+      plot.title = element_text(size=11),
+      axis.title.x=element_blank(),
+      #axis.text.x=element_blank()
     ) +
-    ggtitle("A boxplot with jitter") +
-    #xlab("")+
+ 
+    labs( y = "SD Diff",
+            title = "Student Performance Variation by Practice Category",
+            x = "",
+            caption = "NextGen HS Physics MCAS") +
   facet_wrap(~`Practice Cat`)
+
+
+      
 
 
 HSPhy_NextGen_SchoolSum%>%
@@ -378,12 +438,17 @@ HSPhy_NextGen_SchoolSum%>%
     geom_boxplot() +
     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
     geom_jitter(color="black", size=0.4, alpha=0.9) +
-    theme_ipsum() +
+    #theme_ipsum() +
     theme(
      
-      plot.title = element_text(size=11)
+      plot.title = element_text(size=11),
+      axis.title.x=element_blank(),
+      axis.text.x=element_blank()
     ) +
-    ggtitle("A boxplot with jitter") +
+     labs( y = "SD Diff",
+            title = "Student Practice Cat. Variation by Achievement Level",
+            x = "",
+            caption = "NextGen HS Physics MCAS") +
     #xlab("")+
   facet_wrap(~`EM Perf Stat`)
 
@@ -394,14 +459,75 @@ HSPhy_NextGen_SchoolSum%>%
     geom_boxplot() +
     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
     geom_jitter(color="black", size=0.4, alpha=0.9) +
-    theme_ipsum() +
+    #theme_ipsum() +
     theme(
       
       plot.title = element_text(size=11)
     ) +
-    ggtitle("A boxplot with jitter") +
+    labs( y = "%Points Earned",
+            title = "Student Practice Cat. Achievement by Performance Level",
+            x = "",
+            caption = "NextGen HS Physics MCAS") +
     #xlab("")+
   facet_wrap(~`Practice Cat`)
+
+HSPhy_NextGen_SchoolSum%>%
+  select(`EM Perf Stat`, `ERM%`, `MD%` )%>%
+  pivot_longer(c(2:3), names_to = "Practice Cat", values_to = "%Points")%>%
+  ggplot( aes(x= `Practice Cat`, y=`%Points`, fill= `Practice Cat`)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    #theme_ipsum() +
+    theme(
+      
+      plot.title = element_text(size=11)
+    ) +
+    labs( y = "%Points Earned",
+            title = "Student Practice Cat. Achievement by Performance Level",
+            x = "",
+            caption = "NextGen HS Physics MCAS") +
+    #xlab("")+
+  facet_wrap(~`EM Perf Stat`, scale ="free_y")
+
+
+# HSPhy_NextGen_SchoolSum%>%
+#   select(`EM Perf Stat`, `ERMDiff`, `MDDiff` )%>%
+#   pivot_longer(c(2:3), names_to = "Practice Cat", values_to = "%Points")%>%
+#   ggplot( aes(x= `EM Perf Stat`, y=`%Points`, fill= `EM Perf Stat`)) +
+#     geom_boxplot() +
+#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+#     geom_jitter(color="black", size=0.4, alpha=0.9) +
+#     #theme_ipsum() +
+#     theme(
+#       
+#       plot.title = element_text(size=11)
+#     ) +
+#     labs( y = "%Points Earned",
+#             title = "Student Practice Cat. Achievement by Performance Level",
+#             x = "",
+#             caption = "NextGen HS Physics MCAS") +
+#     #xlab("")+
+#   facet_wrap(~`Practice Cat`)
+
+# HSPhy_NextGen_SchoolSum%>%
+#   select(`EM Perf Stat`, `ERM%`, `MD%` )%>%
+#   pivot_longer(c(2:3), names_to = "Practice Cat", values_to = "%Points")%>%
+#   ggplot( aes(x= `Practice Cat`, y=`%Points`, fill= `Practice Cat`)) +
+#     geom_boxplot() +
+#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+#     geom_jitter(color="black", size=0.4, alpha=0.9) +
+#     #theme_ipsum() +
+#     theme(
+#       
+#       plot.title = element_text(size=11)
+#     ) +
+#     labs( y = "%Points Earned",
+#             title = "Student Practice Cat. Achievement by Performance Level",
+#             x = "",
+#             caption = "NextGen HS Physics MCAS") +
+#     #xlab("")+
+#   facet_wrap(~`EM Perf Stat`, scale ="free_y")
   
 
 # HSPhy_NextGen_SchoolSum %>%
@@ -464,85 +590,130 @@ HSPhy_NextGen_SchoolSum%>%
 
 ```{r}
 
-HSPhy_NextGen_SchoolSum %>%
-  ggplot( aes(x= `EM Perf Stat`, y=`MF%`, fill= `EM Perf Stat`)) +
+HSPhy_NextGen_SchoolSum%>%
+  select(`EM Perf Stat`, `MF Diff SD`, `EN Diff SD`, `WA Diff SD` )%>%
+  pivot_longer(c(2:4), names_to = "Report Cat", values_to = "SD Diff")%>%
+  ggplot( aes(x= `EM Perf Stat`, y=`SD Diff`, fill= `EM Perf Stat`)) +
     geom_boxplot() +
     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
     geom_jitter(color="black", size=0.4, alpha=0.9) +
-    theme_ipsum() +
+    
     theme(
-      legend.position="none",
-      plot.title = element_text(size=11)
+      plot.title = element_text(size=11),
+      axis.title.x=element_blank(),
+      axis.text.x=element_blank()
     ) +
-    ggtitle("A boxplot with jitter") +
-    xlab("")
+ 
+    labs( y = "SD Diff",
+            title = "Student Performance Variation by Content Reporting Category",
+            x = "",
+            caption = "NextGen HS Physics MCAS") +
+  facet_wrap(~`Report Cat`)
 
-HSPhy_NextGen_SchoolSum %>%
-  ggplot( aes(x= `EM Perf Stat`, y=`MF Diff SD`, fill= `EM Perf Stat`)) +
+
+      
+
+
+HSPhy_NextGen_SchoolSum%>%
+  select(`EM Perf Stat`, `MF Diff SD`, `EN Diff SD`, `WA Diff SD` )%>%
+  pivot_longer(c(2:4), names_to = "Report Cat", values_to = "SD Diff")%>%
+  ggplot( aes(x= `Report Cat`, y=`SD Diff`, fill= `Report Cat`)) +
     geom_boxplot() +
     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
     geom_jitter(color="black", size=0.4, alpha=0.9) +
-    theme_ipsum() +
+    #theme_ipsum() +
     theme(
-      legend.position="none",
-      plot.title = element_text(size=11)
+     
+      plot.title = element_text(size=11),
+      axis.title.x=element_blank(),
+      axis.text.x=element_blank()
     ) +
-    ggtitle("A boxplot with jitter") +
-    xlab("")
+     labs( y = "SD Diff",
+            title = "Student Content Reporting Cat. Variation by Achievement Level",
+            x = "",
+            caption = "NextGen HS Physics MCAS") +
+    #xlab("")+
+  facet_wrap(~`EM Perf Stat`)
 
-
-
-HSPhy_NextGen_SchoolSum %>%
-  ggplot( aes(x= `EM Perf Stat`, y=`EN%`, fill= `EM Perf Stat`)) +
-    geom_boxplot() +
-    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-    geom_jitter(color="black", size=0.4, alpha=0.9) +
-    theme_ipsum() +
-    theme(
-      legend.position="none",
-      plot.title = element_text(size=11)
-    ) +
-    ggtitle("A boxplot with jitter") +
-    xlab("")
-
-HSPhy_NextGen_SchoolSum %>%
-  ggplot( aes(x= `EM Perf Stat`, y=`EN Diff SD`, fill= `EM Perf Stat`)) +
-    geom_boxplot() +
-    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-    geom_jitter(color="black", size=0.4, alpha=0.9) +
-    theme_ipsum() +
-    theme(
-      legend.position="none",
-      plot.title = element_text(size=11)
-    ) +
-    ggtitle("A boxplot with jitter") +
-    xlab("")
-
-HSPhy_NextGen_SchoolSum %>%
-  ggplot( aes(x= `EM Perf Stat`, y=`WA%`, fill= `EM Perf Stat`)) +
-    geom_boxplot() +
-    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-    geom_jitter(color="black", size=0.4, alpha=0.9) +
-    theme_ipsum() +
-    theme(
-      legend.position="none",
-      plot.title = element_text(size=11)
-    ) +
-    ggtitle("A boxplot with jitter") +
-    xlab("")
-
-HSPhy_NextGen_SchoolSum %>%
-  ggplot( aes(x= `EM Perf Stat`, y=`WA Diff SD`, fill= `EM Perf Stat`)) +
-    geom_boxplot() +
-    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-    geom_jitter(color="black", size=0.4, alpha=0.9) +
-    theme_ipsum() +
-    theme(
-      legend.position="none",
-      plot.title = element_text(size=11)
-    ) +
-    ggtitle("A boxplot with jitter") +
-    xlab("")
+# HSPhy_NextGen_SchoolSum %>%
+#   ggplot( aes(x= `EM Perf Stat`, y=`MF%`, fill= `EM Perf Stat`)) +
+#     geom_boxplot() +
+#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+#     geom_jitter(color="black", size=0.4, alpha=0.9) +
+#     theme_ipsum() +
+#     theme(
+#       legend.position="none",
+#       plot.title = element_text(size=11)
+#     ) +
+#     ggtitle("A boxplot with jitter") +
+#     xlab("")
+# 
+# HSPhy_NextGen_SchoolSum %>%
+#   ggplot( aes(x= `EM Perf Stat`, y=`MF Diff SD`, fill= `EM Perf Stat`)) +
+#     geom_boxplot() +
+#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+#     geom_jitter(color="black", size=0.4, alpha=0.9) +
+#     theme_ipsum() +
+#     theme(
+#       legend.position="none",
+#       plot.title = element_text(size=11)
+#     ) +
+#     ggtitle("A boxplot with jitter") +
+#     xlab("")
+# 
+# 
+# 
+# HSPhy_NextGen_SchoolSum %>%
+#   ggplot( aes(x= `EM Perf Stat`, y=`EN%`, fill= `EM Perf Stat`)) +
+#     geom_boxplot() +
+#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+#     geom_jitter(color="black", size=0.4, alpha=0.9) +
+#     theme_ipsum() +
+#     theme(
+#       legend.position="none",
+#       plot.title = element_text(size=11)
+#     ) +
+#     ggtitle("A boxplot with jitter") +
+#     xlab("")
+# 
+# HSPhy_NextGen_SchoolSum %>%
+#   ggplot( aes(x= `EM Perf Stat`, y=`EN Diff SD`, fill= `EM Perf Stat`)) +
+#     geom_boxplot() +
+#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+#     geom_jitter(color="black", size=0.4, alpha=0.9) +
+#     theme_ipsum() +
+#     theme(
+#       legend.position="none",
+#       plot.title = element_text(size=11)
+#     ) +
+#     ggtitle("A boxplot with jitter") +
+#     xlab("")
+# 
+# HSPhy_NextGen_SchoolSum %>%
+#   ggplot( aes(x= `EM Perf Stat`, y=`WA%`, fill= `EM Perf Stat`)) +
+#     geom_boxplot() +
+#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+#     geom_jitter(color="black", size=0.4, alpha=0.9) +
+#     theme_ipsum() +
+#     theme(
+#       legend.position="none",
+#       plot.title = element_text(size=11)
+#     ) +
+#     ggtitle("A boxplot with jitter") +
+#     xlab("")
+# 
+# HSPhy_NextGen_SchoolSum %>%
+#   ggplot( aes(x= `EM Perf Stat`, y=`WA Diff SD`, fill= `EM Perf Stat`)) +
+#     geom_boxplot() +
+#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+#     geom_jitter(color="black", size=0.4, alpha=0.9) +
+#     theme_ipsum() +
+#     theme(
+#       legend.position="none",
+#       plot.title = element_text(size=11)
+#     ) +
+#     ggtitle("A boxplot with jitter") +
+#     xlab("")
 
 ```
 
