@@ -208,7 +208,21 @@ HSPhy_Size<-HSPhy_SchoolSize%>%
 HSPhy_Size
 
 HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
-  left_join(HSPhy_Size, by = c("School Name" = "School Name", "School Code" = "School Code"))
+  left_join(HSPhy_Size, by = c("School Name" = "School Name", "School Code" = "School Code"))%>%
+  mutate(`E Perf Stat` = case_when(
+    `EDiff` > quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[4] ~ "High",
+    `EDiff` <= quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[4] &
+      `EDiff` > quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[3] ~ "High-Mid",
+    `EDiff` <= quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[3] &
+      `EDiff` > quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[2] ~ "Low-Mid",
+    `EDiff` <= quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[2] ~ "Low"
+  ))%>%
+  mutate(`E Perf Stat` = recode_factor(`E Perf Stat`,
+                                 "High" = "High",
+                                 "High-Mid" = "High-Mid",
+                                 "Low-Mid" = "Low-Mid",
+                                 "Low" = "Low",
+                                 .ordered = TRUE))
 HSPhy_NextGen_SchoolSum
 
 
@@ -226,22 +240,45 @@ print(summarytools::dfSummary(HSPhy_NextGen_SchoolSum,
 
 ```
 
-# High E Summary
+
+## High E Summary
 ```{r}
 
+ #quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[4]
+
+
+ 
 HSPhy_NextGen_SchoolSum%>%
-  filter(`EDiff` > 0) %>%
-  summarise( `Mean MD SD` = mean(`MD Diff SD`), .groups = 'drop')
- # summarise(Date_exersized= min(ActivityDate), .groups = 'drop') 
-# Make a Histogram of MD Diff SD
+  group_by(`E Perf Stat`)%>%
+    summarise( `Mean MD%` = mean(`MD%`), 
+              `Mean MD SD` = mean(`MD Diff SD`),
+              `Mean ERM%` = mean(`ERM%`),
+               `Mean ERM SD` = mean (`ERM Diff SD`))
+
+
+HSPhy_NextGen_SchoolSum%>%
+  group_by(`E Perf Stat`)%>%
+    summarise( `Mean MF%` = mean(`MF%`), 
+              `Mean MF SD` = mean(`MF Diff SD`),
+              `Mean EN%` = mean(`EN%`),
+               `Mean EN SD` = mean (`EN Diff SD`),
+              `Mean WA%` = mean(`WA%`),
+               `Mean WA SD` = mean (`WA Diff SD`)
+              )
+
+
+
+```
+# Visualization
+```{r}
+# Make a Histogram or box and whiskers of MD Diff SD
 # Make a Histogram of MD %
 # Make a Histogram of Each reporting category
 # Make a Histogram of MD Diff SD
 ## Facet this by %E
 
 
-```
-# Visualization
 
+```
 
 # References
