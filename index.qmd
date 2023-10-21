@@ -257,12 +257,16 @@ print(summarytools::dfSummary(HSPhy_NextGen_SchoolSum,
 
 ```
 
-## High EM Summary
+## Key Variables
+
+To explore the relationship between the distribution of Student `Performance Level`
+and student's performance in content categories, we examine the percentage of points 
+earned by students at school's as well as the standard deviation of the difference between points earned by students at a school and points earned by students in the state across `Reporting Categories` and `Practice Categories`. We grouped schools by their `EM Perf Stat`, an ordinal variable classifying schools 
+by the percentage of students they have There
 
 ```{r}
 
- quantile(HSPhy_NextGen_SchoolSum$`EMDiff`)
-# how to adjust quantiles to only include above state?
+ #quantile(HSPhy_NextGen_SchoolSum$`EMDiff`)
 
 
  
