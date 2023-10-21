@@ -57,21 +57,21 @@ Tennessee and Texas belongs to the Council of Chief State School
 Officers' (CCSO), [High Quality Instructional Materials and Professional
 Development
 network](https://learning.ccsso.org/high-quality-instructional-materials)
-with the stated goal of ensuring that "Every student everyday is engaged
-in meaningful, affirming, grade-level instruction, by ensuring that
+which aims to close the "opportunity gap" amongst students by ensuring that 
 every teacher has access to high-quality, standards aligned
 instructional materials and receives relevant professional development
-to support their use of these materials, and recently released a [Case
-Study](https://753a0706.flowpaper.com/CCSSOIMPDCaseStudyOVERVIEWFINAL/#page=3)
-outlining progress and policy guidance for ensuring teachers and
-students have access to High Quality Instructional Materials.
+to support their use of these materials [@IMPD21].
 
-Since all Massachusetts students must pass a High School science MCAS
-and school's receive annual reports on student performance on the MCAS
-exams, student performance reports could be leveraged to provide schools
-guidance on curricular areas to support.
+All Massachusetts Public School students must complete a High School science MCAS
+exam providing a wealth of standardized data on student's content understanding.
+All school's receive annual summary reports on student performance as well as 
+disaggregated student item performance reports [@MCASIT]. Significant work has been 
+done using MCAS data and the Student Opportunity Act to address funding inequities
+across the Commonwealth [@Boats20]. With funding gaps outlined in the late 1990's 
+closing, one could consider how the MCAS data could be leveraged to support the state's 
+current high quality instructional materials initiatives by providing schools with guidance on curricular areas in most need of support.
 
-considering Next Generation MCAS High School Introductory Physics
+Using the Curricular information provided in state wide Next Generation MCAS High School Introductory Physics
 student performance data, we hope to address the following broad
 questions:
 
@@ -89,49 +89,63 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
     adjustments?
 :::
 
+
 In this report, I will analyze the High School Introductory Physics Next
 Generation [Massachusetts Comprehensive Assessment System
 (MCAS)](https://www.doe.mass.edu/mcas/default.html) tests results for
 Massachusetts public schools.
 
-The `HSPhy_NextGenMCASDF` data frame contains performance results from
+Data for the study were drawn from DESE’s Next Generation MCAS Test
+[Achievement Results statewide report](https://profiles.doe.mass.edu/statereport/mcas.aspx),
+[Item Analysis statewide report](https://profiles.doe.mass.edu/statereport/nextgenmcas_item.aspx), and 
+the [MCAS digital item library](https://mcas.digitalitemlibrary.com/home?subject=Science&grades=Physics&view=ALL). Throughout the commonwealth, 27,745 students from 112 schools participated in the 
+2022 and 2023 Next Generation HighSchool Introductory Physics MCAS. 
+The assessment consists of 42 multiple choice and constructed response items that 
+assess students on Physical Science standards from the [2016 STE Massachusetts
+Curriculum Framework](https://www.doe.mass.edu/frameworks/scitech/2016-04.pdf) 
+in the `Reporting Categories` of Motions and Forces, `MF`, 
+Energy, `EN`, and Waves, `WA`. Each item is associated with a specific content standard from the Massachusetts Curriculum Framework as well as an underlying science `Practice Category` of 
+Evidence Reasoning and Modeling, `ERM`, Mathematics and Data, `MD`, or Investigations 
+and Questioning, `IQ`. The State Item Report provides the percentage of points earned by 
+students in a school for each item as well as the percentage of points earned by 
+all students in the state for each item.
+
+
+The `HSPhy_NextGen_SchoolSum` data frame contains performance results and 
+demographic characteristics from
 112 public schools across the commonwealth on the Next Generation High
 School Introductory Physics MCAS, which was administered in the Spring
-of 2022 and 2023.
+of 2022 and 2023. 87 of those schools
+tested students in both years and 25 of those schools only tested
+students in 1 of the 2 testing years.
 
-For each school, there are values reported for 256 different variables
-which consist of information from two broad categories
+For each school, there are values reported for 44 different variables
+which consist of information from three broad categories
 
 -   *School Characteristics*: This includes the name of the school and
-    the size of the school as determined by the number of students that
+    the size of the school, `School Size`, as determined by the number of students that
     completed the MCAS exam.
 
 -   *Science Practice and Reporting Category Performance Metrics*: This
-    includes the `Category Possible Points`, which summarizes the amount
-    of points available on the exams from a given Reporting or Practice
-    category, the school's percentage of points earned on items
-    associated with each `Practice Category` (A. Investigations and
-    Questioning, B. Mathematics and Data, and C. Evidence, Reasoning,
-    and Modeling ) and `Reporting Category`(MF (motion and forces) WA
-    (waves), and EN (energy)). Details about the Science content and
-    practice categories can be found in the the [2016 STE Massachusetts
-    Curriculum
-    Framework](https://www.doe.mass.edu/frameworks/scitech/2016-04.pdf).
+    includes the percentage of points earned by students at a school in 
+    each content category, `MF%`, `EN%`, `WA%` and practice category 
+    `ERM%`, `MD%`, `IQ%`, the difference between a school's percentage of points 
+    earned compared to student's in the state (`MFDiff`, `ENDiff`, etc...), and 
+    the variability in a school's performance relative to the state by category as 
+    measured by the standard deviation (`SD MF Diff`, `SD EN Diff`, etc...).
+    
 
--   *Aggregate Performance metrics*: This includes a school's percentage
-    of students at each of the four `Performance Levels`, (E: Exceeding
-    Expectations, M: Meeting Expectations, PM: Partially Meeting
-    Expectations, and NM: Not Meeting Expectations), as well as a
-    school's Average Scaled Score.
+-   *Aggregate Performance Level metrics*: This includes a school's percentage
+    of students at each of the four `Performance Levels`, (`E%`: Exceeding
+    Expectations, `M%`: Meeting Expectations, `PM%`: Partially Meeting
+    Expectations, and `NM%`: Not Meeting Expectations), as well as a
+    the difference between these percentages and the percentage of students 
+    in Massachusetts at each performance level (`EDiff`, `MDiff`, `PMDiff`, `NMDiff`).
 
--   *School-State Diff metrics*: For each performance metric, the
-    `School-State Diff` metric reports the difference between the
-    percentage of points earned by students at a given school,
-    `School Percent Points` and the percentage of available points
-    earned by students in the state `State Percent Points`.
+
 
 See the `HSPhy_NextGenMCASDF` data frame summary and **codebook** for
-further details.
+further details about all variables.
 
 # Hypothesis
 
@@ -157,12 +171,15 @@ tested students in both years and 25 of those schools only tested
 students in 1 of the 2 testing years.
 
 ```{r}
+#| label: dataframe setup
+#| warning: false
+#| message: false
 
 #HSPhy_NextGen_SchoolSum
 HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
   ungroup()
 
-HSPhy_NextGen_SchoolSum
+#HSPhy_NextGen_SchoolSum
 # HSPhy_NextGen_PerfDF
 # HSPhy_NextGen_SchoolIT301DF
 
@@ -184,7 +201,7 @@ HSPhy_SchoolSize <- rbind(HSPhy_2023_SchoolSizeDF, HSPhy_2022_SchoolSizeDF)%>%
             `Tested` = sum(`Tested`))%>%
   mutate(`Tested Count` = round(`Tested`/count))%>%
   ungroup()
-HSPhy_SchoolSize
+#HSPhy_SchoolSize
 quantile <- quantile(HSPhy_SchoolSize$`Tested Count`)
 HSPhy_Size<-HSPhy_SchoolSize%>%
   mutate(`School Size` = case_when(
@@ -205,7 +222,7 @@ HSPhy_Size<-HSPhy_SchoolSize%>%
   select(`School Name`, `School Code`, `School Size`)
 
 
-HSPhy_Size
+#HSPhy_Size
 
 HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
   left_join(HSPhy_Size, by = c("School Name" = "School Name", "School Code" = "School Code"))%>%
@@ -227,7 +244,7 @@ HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
                                  "Low" = "Low",
                                  .ordered = TRUE))
 HSPhy_NextGen_SchoolSum
-quantile(HSPhy_NextGen_SchoolSum$`EMDiff`)
+#quantile(HSPhy_NextGen_SchoolSum$`EMDiff`)
 
                                       
 
@@ -243,12 +260,8 @@ print(summarytools::dfSummary(HSPhy_NextGen_SchoolSum,
 
 ```
 
-
-  
-  
-
-
 ## High EM Summary
+
 ```{r}
 
  quantile(HSPhy_NextGen_SchoolSum$`EMDiff`)
@@ -277,6 +290,7 @@ HSPhy_NextGen_SchoolSum%>%
 
 
 ```
+
 # Visualization
 
 ## Distribution of Performance Level %
@@ -304,6 +318,7 @@ HSPhy_NextGen_SchoolSum%>%
 
 
 ```
+
 ## Distribution of Practice Cat Scores
 
 ```{r}
@@ -332,6 +347,7 @@ HSPhy_NextGen_SchoolSum%>%
 ```
 
 ## Distribution of Practice Cat SD
+
 ```{r}
   
   HSPhy_NextGen_SchoolSum%>%
@@ -352,6 +368,7 @@ HSPhy_NextGen_SchoolSum%>%
             caption = "NextGen HS Physics MCAS") +
     facet_wrap(~`Practice Cat`)
 ```
+
 ## Student Performance by Reporting Category
 
 ```{r}
@@ -374,6 +391,7 @@ HSPhy_NextGen_SchoolSum%>%
   facet_wrap(~`Report Cat`)
 
 ```
+
 ```{r}
 HSPhy_NextGen_SchoolSum%>%
   select(`EM Perf Stat`, `MF%`, `EN%`, `WA%` )%>%
@@ -398,8 +416,8 @@ HSPhy_NextGen_SchoolSum%>%
 
 ```
 
-
 ## Mathematics and Data vs. Evidence Reasoning and Modeling (Practice Category)
+
 ```{r}
 # Make a Histogram or box and whiskers of MD Diff SD
 # Make a Histogram of MD %
@@ -584,7 +602,6 @@ HSPhy_NextGen_SchoolSum%>%
 
 
 ```
-
 
 ## Mathematics and Data vs. Evidence Reasoning and Modeling (Reporting Category)
 
