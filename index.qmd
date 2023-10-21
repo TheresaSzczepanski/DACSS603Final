@@ -244,7 +244,8 @@ print(summarytools::dfSummary(HSPhy_NextGen_SchoolSum,
 ## High E Summary
 ```{r}
 
- #quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[4]
+ quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[4]
+# how to adjust quantiles to only include above state?
 
 
  
@@ -277,6 +278,18 @@ HSPhy_NextGen_SchoolSum%>%
 # Make a Histogram of MD Diff SD
 ## Facet this by %E
 
+HSPhy_NextGen_SchoolSum %>%
+  ggplot( aes(x= `E Perf Stat`, y=`MD%`, fill= `E Perf Stat`)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("A boxplot with jitter") +
+    xlab("")
 
 
 ```
