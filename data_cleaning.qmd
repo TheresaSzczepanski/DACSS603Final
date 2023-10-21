@@ -71,12 +71,19 @@ HSPhy_NextGenIT301<-NextGenIT301%>%
 
 ```{r}
 HSPhy_2022_SchoolItemDF<-read_school_item("data/2022_Physics_NextGenMCASItem.xlsx", 2022, "PHY")
-#HSPhy_2022_SchoolItemDF
+
+
+#quantile(HSPhy_2022_SchoolSizeDF$`Tested`)
+#HSPhy_2022_SchoolSizeDF
 
 HSPhy_2022_SchoolItemDF<-HSPhy_2022_SchoolItemDF%>%
   left_join(HSPhy_2022_StateItemDF, by= c('Year'='Year', 'Subject'='Subject', 'ITEM' = 'ITEM'))%>%
   mutate(`School-State Diff` = `School%`- `State%`)
-#HSPhy_2022_SchoolItemDF
+
+
+
+
+
 
 
 HSPhy_2023_SchoolItemDF<-read_school_item("data/2023_Physics_NextGenMCASItem.xlsx", 2023, "PHY")
@@ -85,6 +92,23 @@ HSPhy_2023_SchoolItemDF<-read_school_item("data/2023_Physics_NextGenMCASItem.xls
 HSPhy_2023_SchoolItemDF<-HSPhy_2023_SchoolItemDF%>%
   left_join(HSPhy_2023_StateItemDF, by= c('Year'='Year', 'Subject'='Subject', 'ITEM' = 'ITEM'))%>%
   mutate(`School-State Diff` = `School%`- `State%`)
+
+# %>%
+#   mutate(`School Size` = case_when(
+#     `Tested Students` <= quantile(HSPhy_2022_SchoolItemDF$`Tested Students`)[2] ~ "Small",
+#     `Tested Students` > quantile(HSPhy_2022_SchoolItemDF$`Tested Students`)[2] &
+#       `Tested Students` <= quantile(HSPhy_2022_SchoolItemDF$`Tested Students`)[3] ~ "Low-Mid",
+#     `Tested Students` > quantile(HSPhy_2022_SchoolItemDF$`Tested Students`)[3] &
+#     `Tested Students` <= quantile(HSPhy_2022_SchoolItemDF$`Tested Students`)[4] ~ "Upper-Mid",
+#      `Tested Students` > quantile(HSPhy_2022_SchoolItemDF$`Tested Students`)[4] &
+#     `Tested Students` <= quantile(HSPhy_2022_SchoolItemDF$`Tested Students`)[5] ~ "Large",
+#     ))%>%
+#   mutate(`School Size` = recode_factor(`School Size`,
+#                                        "Small" = "Small",
+#                                        "Low-Mid" = "Low-Mid",
+#                                        "Upper-Mid" = "Upper-Mid",
+#                                        "Large" = "Large",
+#                                        .ordered = TRUE))
 
 #HSPhy_2023_SchoolItemDF
 
@@ -102,7 +126,53 @@ HSPhy_NextGen_SchoolItemDF <- rbind(HSPhy_2022_SchoolItemDF, HSPhy_2023_SchoolIt
 
 
 ```
+# Create School Size DF
 
+```{r}
+# HSPhy_2022_SchoolSizeDF<-read_excel("data/2022_Physics_NextGenMCASItem.xlsx", skip = 1)%>%
+#   select(`School Name`, `School Code`, `Tested`)%>%
+#   mutate(`Tested` = as.integer(`Tested`))
+#  
+# #HSPhy_2022_SchoolSizeDF
+# #quantile(HSPhy_2022_SchoolSizeDF$`Tested`)
+#    
+# 
+# 
+# HSPhy_2023_SchoolSizeDF<-read_excel("data/2023_Physics_NextGenMCASItem.xlsx", skip = 1)%>%
+#   select(`School Name`, `School Code`, `Tested`)%>%
+#    mutate(`Tested` = as.integer(`Tested`))%>%
+#     select(`School Name`, `School Code`, `Tested`)
+# 
+# HSPhy_2023_SchoolSizeDF
+# HSPhy_2022_SchoolSizeDF
+# 
+# HSPhy_SchoolSize <- rbind(HSPhy_2023_SchoolSizeDF, HSPhy_2022_SchoolSizeDF)%>%
+#   mutate(count = 1)%>%
+#   group_by(`School Name`, `School Code`)%>%
+#   summarise(count = sum(count),
+#             `Tested` = sum(`Tested`))%>%
+#   mutate(`Tested Count` = round(`Tested`/count))%>%
+#   mutate(`School Size` = case_when(
+#      `Tested Count` <= quantile(HSPhy_SchoolSize$`Tested Count`)[2] ~ "Small",
+#        `Tested Count` > quantile(HSPhy_SchoolSize$`Tested Count`)[2] &
+#          `Tested Count` <= quantile(HSPhy_SchoolSize$`Tested Count`)[3] ~ "Low-Mid",
+#        `Tested Count` > quantile(HSPhy_SchoolSize$`Tested Count`)[3] &
+#        `Tested Count` <= quantile(HSPhy_SchoolSize$`Tested Count`)[4] ~ "Upper-Mid",
+#         `Tested Count` > quantile(HSPhy_SchoolSize$`Tested Count`)[4] &
+#        `Tested Count` <= quantile(HSPhy_SchoolSize$`Tested Count`)[5] ~ "Large",
+#        ))%>%
+#   select(`School Name`, `School Code`, `School Size`)
+
+# %>%
+#   mutate(`School Size` = recode_factor(`School Size`,
+#                                             "Small" = "Small",
+#                                             "Low-Mid" = "Low-Mid",
+#                                             "Upper-Mid" = "Upper-Mid",
+#                                             "Large" = "Large",
+#                                             .ordered = TRUE))
+
+#HSPhy_SchoolSize
+```
 # Create Summary State NextGen Achievement Reports
 
 ```{r}
@@ -211,7 +281,7 @@ HSPhy_NextGen_CatSum <- left_join(HSPhy_NextGen_RCSum, HSPhy_NextGen_PCSum, by =
 HSPhy_NextGen_SumDF<-left_join(HSPhy_NextGen_AchSumDF, HSPhy_NextGen_CatSum, by = "Subject")%>%
   select(!contains("Name"))
 
-#HSPhy_NextGen_SumDF
+HSPhy_NextGen_SumDF
 
 ```
 
@@ -293,7 +363,6 @@ HSPhy_NextGen_SchoolSum
 
 
 
-## State E below average with Practice Category
 
 ```{r}
 # State E below average

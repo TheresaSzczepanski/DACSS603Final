@@ -157,6 +157,12 @@ tested students in both years and 25 of those schools only tested
 students in 1 of the 2 testing years.
 
 ```{r}
+
+#HSPhy_NextGen_SchoolSum
+HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
+  ungroup()
+
+HSPhy_NextGen_SchoolSum
 # HSPhy_NextGen_PerfDF
 # HSPhy_NextGen_SchoolIT301DF
 
@@ -176,7 +182,9 @@ HSPhy_SchoolSize <- rbind(HSPhy_2023_SchoolSizeDF, HSPhy_2022_SchoolSizeDF)%>%
   group_by(`School Name`, `School Code`)%>%
   summarise(count = sum(count),
             `Tested` = sum(`Tested`))%>%
-  mutate(`Tested Count` = round(`Tested`/count))
+  mutate(`Tested Count` = round(`Tested`/count))%>%
+  ungroup()
+HSPhy_SchoolSize
 quantile <- quantile(HSPhy_SchoolSize$`Tested Count`)
 HSPhy_Size<-HSPhy_SchoolSize%>%
   mutate(`School Size` = case_when(
@@ -188,6 +196,12 @@ HSPhy_Size<-HSPhy_SchoolSize%>%
     `Tested Count` > quantile[4] &
       `Tested Count` <= quantile[5] ~ "Large",
   ))%>%
+  mutate(`School Size` = recode_factor(`School Size`,
+                                            "Small" = "Small",
+                                            "Low-Mid" = "Low-Mid",
+                                            "Upper-Mid" = "Upper-Mid",
+                                            "Large" = "Large",
+                                            .ordered = TRUE))%>%
   select(`School Name`, `School Code`, `School Size`)
 
 
@@ -195,23 +209,38 @@ HSPhy_Size
 
 HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
   left_join(HSPhy_Size, by = c("School Name" = "School Name", "School Code" = "School Code"))
-#HSPhy_NextGen_SchoolSum
-
 HSPhy_NextGen_SchoolSum
+
+
                                       
 
-summary(HSPhy_NextGen_SchoolSum)
-# #print(summarytools::dfSummary(HSPhy_NextGen_SchoolSum,
-#                          varnumbers = FALSE,
-#                          plain.ascii  = FALSE,
-#                          style        = "grid",
-#                          graph.magnif = 0.70,
-#                         valid.col    = FALSE),
-#        method = 'render',
-#        table.classes = 'table-condensed')
+#summary(HSPhy_NextGen_SchoolSum)
+print(summarytools::dfSummary(HSPhy_NextGen_SchoolSum,
+                         varnumbers = FALSE,
+                         plain.ascii  = FALSE,
+                         style        = "grid",
+                         graph.magnif = 0.70,
+                        valid.col    = FALSE),
+       method = 'render',
+       table.classes = 'table-condensed')
 
 ```
 
+# High E Summary
+```{r}
+
+HSPhy_NextGen_SchoolSum%>%
+  filter(`EDiff` > 0) %>%
+  summarise( `Mean MD SD` = mean(`MD Diff SD`), .groups = 'drop')
+ # summarise(Date_exersized= min(ActivityDate), .groups = 'drop') 
+# Make a Histogram of MD Diff SD
+# Make a Histogram of MD %
+# Make a Histogram of Each reporting category
+# Make a Histogram of MD Diff SD
+## Facet this by %E
+
+
+```
 # Visualization
 
 
