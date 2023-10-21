@@ -209,22 +209,25 @@ HSPhy_Size
 
 HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
   left_join(HSPhy_Size, by = c("School Name" = "School Name", "School Code" = "School Code"))%>%
-  mutate(`E Perf Stat` = case_when(
-    `EDiff` > quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[4] ~ "High",
-    `EDiff` <= quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[4] &
-      `EDiff` > quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[3] ~ "High-Mid",
-    `EDiff` <= quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[3] &
-      `EDiff` > quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[2] ~ "Low-Mid",
-    `EDiff` <= quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[2] ~ "Low"
+  mutate(`EMDiff` = `EDiff` + `MDiff`)%>%
+  mutate(`EM Perf Stat` = case_when(
+    `EDiff` > 0 & `EDiff` + `MDiff` > 0 ~ "HighEM",
+    `EDiff` <= 0 & `EDiff` + `MDiff` > 0 ~ "HighM",
+    #`EMDiff` > quantile(HSPhy_NextGen_SchoolSum$`EMDiff`)[3] & 
+      `EMDiff` <= 0  & `EMDiff` > -14 ~ "Mid",
+    `EMDiff` <= -14 & `EMDiff` >= -33  ~ "Mid-Low",
+    `EMDiff` < -33  ~ "Low"
+   
   ))%>%
-  mutate(`E Perf Stat` = recode_factor(`E Perf Stat`,
-                                 "High" = "High",
-                                 "High-Mid" = "High-Mid",
-                                 "Low-Mid" = "Low-Mid",
+  mutate(`EM Perf Stat` = recode_factor(`EM Perf Stat`,
+                                 "HighEM" = "HighEM",
+                                 "HighM" = "HighM",
+                                 "Mid" = "Mid",
+                                 "Mid-Low" = "Mid-Low",
                                  "Low" = "Low",
                                  .ordered = TRUE))
 HSPhy_NextGen_SchoolSum
-
+quantile(HSPhy_NextGen_SchoolSum$`EMDiff`)
 
                                       
 
@@ -239,18 +242,66 @@ print(summarytools::dfSummary(HSPhy_NextGen_SchoolSum,
        table.classes = 'table-condensed')
 
 ```
+## Distribution of Performance Level %
+
+```{r}
+HSPhy_NextGen_SchoolSum%>%
+  select(`E%`, `M%`, `PM%`, `NM%`)%>%
+  pivot_longer(c(1:4), names_to = "Performance Level", values_to = "% Students")%>%
+   ggplot( aes(x=`% Students`, color=`Performance Level`, fill=`Performance Level`)) +
+    geom_histogram(alpha=0.6, binwidth = 15) +
+    scale_fill_viridis(discrete=TRUE) +
+    scale_color_viridis(discrete=TRUE) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      panel.spacing = unit(0.1, "lines"),
+      strip.text.x = element_text(size = 8)
+    ) +
+    xlab("") +
+    ylab("Assigned Probability (%)") +
+    facet_wrap(~`Performance Level`)
 
 
-## High E Summary
+```
+## Distribution of E Diff
+
 ```{r}
 
- quantile(HSPhy_NextGen_SchoolSum$`EDiff`)[4]
+HSPhy_NextGen_SchoolSum%>%
+  select(`E%`, `M%`, `PM%`, `NM%`)%>%
+  pivot_longer(c(1:4), names_to = "Performance Level", values_to = "% Students")%>%
+   ggplot( aes(x=`% Students`, color=`Performance Level`, fill=`Performance Level`)) +
+    geom_histogram(alpha=0.6, binwidth = 15) +
+    scale_fill_viridis(discrete=TRUE) +
+    scale_color_viridis(discrete=TRUE) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      panel.spacing = unit(0.1, "lines"),
+      strip.text.x = element_text(size = 8)
+    ) +
+    xlab("") +
+    ylab("Assigned Probability (%)") +
+    facet_wrap(~`Performance Level`)
+
+
+```
+
+
+```
+
+
+## High EM Summary
+```{r}
+
+ quantile(HSPhy_NextGen_SchoolSum$`EMDiff`)
 # how to adjust quantiles to only include above state?
 
 
  
 HSPhy_NextGen_SchoolSum%>%
-  group_by(`E Perf Stat`)%>%
+  group_by(`EM Perf Stat`)%>%
     summarise( `Mean MD%` = mean(`MD%`), 
               `Mean MD SD` = mean(`MD Diff SD`),
               `Mean ERM%` = mean(`ERM%`),
@@ -258,7 +309,7 @@ HSPhy_NextGen_SchoolSum%>%
 
 
 HSPhy_NextGen_SchoolSum%>%
-  group_by(`E Perf Stat`)%>%
+  group_by(`EM Perf Stat`)%>%
     summarise( `Mean MF%` = mean(`MF%`), 
               `Mean MF SD` = mean(`MF Diff SD`),
               `Mean EN%` = mean(`EN%`),
@@ -271,6 +322,26 @@ HSPhy_NextGen_SchoolSum%>%
 
 ```
 # Visualization
+
+## Distribution of Performance Levels
+```{r}
+  ggplot( aes(x=value, color=text, fill=text)) +
+    geom_histogram(alpha=0.6, binwidth = 5) +
+    scale_fill_viridis(discrete=TRUE) +
+    scale_color_viridis(discrete=TRUE) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      panel.spacing = unit(0.1, "lines"),
+      strip.text.x = element_text(size = 8)
+    ) +
+    xlab("") +
+    ylab("Assigned Probability (%)") +
+    facet_wrap(~text)
+
+
+```
+## Mathematics and Data vs. Evidence Reasoning and Modeling (Practice Category)
 ```{r}
 # Make a Histogram or box and whiskers of MD Diff SD
 # Make a Histogram of MD %
@@ -279,7 +350,7 @@ HSPhy_NextGen_SchoolSum%>%
 ## Facet this by %E
 
 HSPhy_NextGen_SchoolSum %>%
-  ggplot( aes(x= `E Perf Stat`, y=`MD%`, fill= `E Perf Stat`)) +
+  ggplot( aes(x= `EM Perf Stat`, y=`MD%`, fill= `EM Perf Stat`)) +
     geom_boxplot() +
     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
     geom_jitter(color="black", size=0.4, alpha=0.9) +
@@ -291,6 +362,132 @@ HSPhy_NextGen_SchoolSum %>%
     ggtitle("A boxplot with jitter") +
     xlab("")
 
+HSPhy_NextGen_SchoolSum %>%
+  ggplot( aes(x= `EM Perf Stat`, y=`MD Diff SD`, fill= `EM Perf Stat`)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("A boxplot with jitter") +
+    xlab("")
+
+HSPhy_NextGen_SchoolSum %>%
+  ggplot( aes(x= `EM Perf Stat`, y=`ERM Diff SD`, fill= `EM Perf Stat`)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("A boxplot with jitter") +
+    xlab("")
+
+HSPhy_NextGen_SchoolSum %>%
+  ggplot( aes(x= `EM Perf Stat`, y=`ERM%`, fill= `EM Perf Stat`)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("A boxplot with jitter") +
+    xlab("")
+
+
+```
+
+
+## Mathematics and Data vs. Evidence Reasoning and Modeling (Reporting Category)
+
+```{r}
+
+HSPhy_NextGen_SchoolSum %>%
+  ggplot( aes(x= `EM Perf Stat`, y=`MF%`, fill= `EM Perf Stat`)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("A boxplot with jitter") +
+    xlab("")
+
+HSPhy_NextGen_SchoolSum %>%
+  ggplot( aes(x= `EM Perf Stat`, y=`MF Diff SD`, fill= `EM Perf Stat`)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("A boxplot with jitter") +
+    xlab("")
+
+
+
+HSPhy_NextGen_SchoolSum %>%
+  ggplot( aes(x= `EM Perf Stat`, y=`EN%`, fill= `EM Perf Stat`)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("A boxplot with jitter") +
+    xlab("")
+
+HSPhy_NextGen_SchoolSum %>%
+  ggplot( aes(x= `EM Perf Stat`, y=`EN Diff SD`, fill= `EM Perf Stat`)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("A boxplot with jitter") +
+    xlab("")
+
+HSPhy_NextGen_SchoolSum %>%
+  ggplot( aes(x= `EM Perf Stat`, y=`WA%`, fill= `EM Perf Stat`)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("A boxplot with jitter") +
+    xlab("")
+
+HSPhy_NextGen_SchoolSum %>%
+  ggplot( aes(x= `EM Perf Stat`, y=`WA Diff SD`, fill= `EM Perf Stat`)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    theme_ipsum() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("A boxplot with jitter") +
+    xlab("")
 
 ```
 
