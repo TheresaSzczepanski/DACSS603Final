@@ -262,7 +262,13 @@ print(summarytools::dfSummary(HSPhy_NextGen_SchoolSum,
 To explore the relationship between the distribution of Student `Performance Level`
 and student's performance in content categories, we examine the percentage of points 
 earned by students at school's as well as the standard deviation of the difference between points earned by students at a school and points earned by students in the state across `Reporting Categories` and `Practice Categories`. We grouped schools by their `EM Perf Stat`, an ordinal variable classifying schools 
-by the percentage of students they have There
+by the percentage of students they have that were classified as either Exceeding or 
+Meeting expectations on the MCAS. These numbers seem to suggest that items classified 
+with the Scientific Practice of `Mathematics and Data` seem to be more challenging to students than those 
+classified as `Evidence, Reasoning, and Modeling`. When considering content Reporting Categories,
+there do not seem to be discernible distinctions between student achievement and performance 
+across categories, except that school's with the weakest achievement, seem to have more success 
+on items from the `Waves` reporting category.
 
 ```{r}
 
@@ -296,6 +302,10 @@ HSPhy_NextGen_SchoolSum%>%
 
 ## Distribution of Performance Level %
 
+When examining the statewide performance distribution, we can see from the right-skew 
+that it is rare for schools to have high percentages of students Not Meeting expectations
+and even rarer for schools to have high percentages of students Exceeding expectations.
+
 ```{r}
 HSPhy_NextGen_SchoolSum%>%
   select(`E%`, `M%`, `PM%`, `NM%`)%>%
@@ -313,14 +323,18 @@ HSPhy_NextGen_SchoolSum%>%
   
     facet_wrap(~`Performance Level`)+
       labs( y = "",
-            title = "Student Performance Level Distribution",
+            title = "School Performance Level Distribution",
             x = "% Students at Performance Level",
             caption = "NextGen HS Physics MCAS")
 
 
 ```
 
-## Distribution of Practice Cat Scores
+## Distribution of School Performance and Variability by Practice Cat
+
+Although `Mathematics and Data` and `Evidence, Reasoning, and Modeling` items 
+have equal weighting in the HS Introductory Physics exam, student performance distributions
+are noticeably different across these practice categories.
 
 ```{r}
 
@@ -339,7 +353,7 @@ HSPhy_NextGen_SchoolSum%>%
   
     facet_wrap(~`Practice Cat`)+
       labs( y = "% Points Earned",
-            title = "Student Performance by Practice Category",
+            title = "School Performance by Practice Category",
             x = "",
             caption = "NextGen HS Physics MCAS")
   #ggtitle("Practice Category Performance")
@@ -347,7 +361,10 @@ HSPhy_NextGen_SchoolSum%>%
 
 ```
 
-## Distribution of Practice Cat SD
+
+When considering the variability of a school's performance on items relative 
+to the state by Practice Category, `SD MD Diff`, and `SD ERM Diff`, we can 
+see that `Mathematics and Data` is skewed more to the right.
 
 ```{r}
   
@@ -364,67 +381,21 @@ HSPhy_NextGen_SchoolSum%>%
       strip.text.x = element_text(size = 8)
     ) +
       labs( y = "SD Diff",
-            title = "Student Performance Variation by Practice Category",
+            title = "School Performance Variation by Practice Category",
             x = "",
             caption = "NextGen HS Physics MCAS") +
     facet_wrap(~`Practice Cat`)
 ```
-
-## Student Performance by Reporting Category
-
-```{r}
-  HSPhy_NextGen_SchoolSum%>%
-  select(`EM Perf Stat`, `MF Diff SD`, `EN Diff SD`, `WA Diff SD` )%>%
-  pivot_longer(c(2:4), names_to = "Report Cat", values_to = "SD Diff")%>%
-  ggplot( aes(x=`SD Diff`, color=`Report Cat`, fill=`Report Cat`)) +
-    geom_histogram(alpha=0.6, binwidth = 3) +
-    scale_fill_viridis(discrete=TRUE) +
-    scale_color_viridis(discrete=TRUE) +
-    #theme_ipsum() +
-    theme(
-      panel.spacing = unit(0.1, "lines"),
-      strip.text.x = element_text(size = 8)
-    ) +
-      labs( y = "SD Diff",
-            title = "Student Performance Variation by Content Reporting Category",
-            x = "",
-            caption = "NextGen HS Physics MCAS") +
-  facet_wrap(~`Report Cat`)
-
-```
-
-```{r}
-HSPhy_NextGen_SchoolSum%>%
-  select(`EM Perf Stat`, `MF%`, `EN%`, `WA%` )%>%
-  pivot_longer(c(2:4), names_to = "Report Cat", values_to = "% Points")%>%
- ggplot( aes(x=`% Points`, color=`Report Cat`, fill=`Report Cat`)) +
-    geom_histogram(alpha=0.6, binwidth = 3) +
-    scale_fill_viridis(discrete=TRUE) +
-    scale_color_viridis(discrete=TRUE) +
-    #theme_ipsum() +
-    theme(
-      panel.spacing = unit(0.1, "lines"),
-      strip.text.x = element_text(size = 8)
-    ) +
-  
-    facet_wrap(~`Report Cat`)+
-      labs( y = "% Points Earned",
-            title = "Student Performance by Content Reporting Category",
-            x = "",
-            caption = "NextGen HS Physics MCAS")
-  #ggtitle("Practice Category Performance")
-
-
-```
-
 ## Mathematics and Data vs. Evidence Reasoning and Modeling (Practice Category)
 
+These images, seem to suggest that schools with the highest percentage of students Exceeding 
+expectations on the MCAS have the lowest levels of variation in performance on 
+Mathematics and Data Items and schools with the lowest percentage of students 
+Exceeding expectations on the MCAS have the highest levels of variation in performance
+on Mathematics and Data Items.
+
 ```{r}
-# Make a Histogram or box and whiskers of MD Diff SD
-# Make a Histogram of MD %
-# Make a Histogram of Each reporting category
-# Make a Histogram of MD Diff SD
-## Facet this by %E
+
 
 HSPhy_NextGen_SchoolSum%>%
   select(`EM Perf Stat`, `ERM Diff SD`, `MD Diff SD` )%>%
@@ -470,7 +441,12 @@ HSPhy_NextGen_SchoolSum%>%
             caption = "NextGen HS Physics MCAS") +
     #xlab("")+
   facet_wrap(~`EM Perf Stat`)
+```
+These images, seem to suggest that students at all schools seem to have 
+more difficulty with Mathematics and Data items as compared to Evidence, Reasoning, 
+and Modeling Items.
 
+```{r}
 HSPhy_NextGen_SchoolSum%>%
   select(`EM Perf Stat`, `ERM%`, `MD%` )%>%
   pivot_longer(c(2:3), names_to = "Practice Cat", values_to = "%Points")%>%
@@ -489,7 +465,9 @@ HSPhy_NextGen_SchoolSum%>%
             caption = "NextGen HS Physics MCAS") +
     #xlab("")+
   facet_wrap(~`Practice Cat`)
+```
 
+```{r}
 HSPhy_NextGen_SchoolSum%>%
   select(`EM Perf Stat`, `ERM%`, `MD%` )%>%
   pivot_longer(c(2:3), names_to = "Practice Cat", values_to = "%Points")%>%
@@ -508,8 +486,6 @@ HSPhy_NextGen_SchoolSum%>%
             caption = "NextGen HS Physics MCAS") +
     #xlab("")+
   facet_wrap(~`EM Perf Stat`, scale ="free_y")
-
-
 # HSPhy_NextGen_SchoolSum%>%
 #   select(`EM Perf Stat`, `ERMDiff`, `MDDiff` )%>%
 #   pivot_longer(c(2:3), names_to = "Practice Cat", values_to = "%Points")%>%
@@ -604,7 +580,68 @@ HSPhy_NextGen_SchoolSum%>%
 
 ```
 
-## Mathematics and Data vs. Evidence Reasoning and Modeling (Reporting Category)
+
+
+## Distribution of School Performance and Variability by Reporting Cat
+
+Here we can visualize the variability of a school's performance on items partitioned 
+instead by Content Reporting Category, `MF%`/`SD MF Diff`,  `EN%`/`SD EN Diff`, and 
+`WA%`/`SD WA Diff`.
+
+
+```{r}
+  HSPhy_NextGen_SchoolSum%>%
+  select(`EM Perf Stat`, `MF Diff SD`, `EN Diff SD`, `WA Diff SD` )%>%
+  pivot_longer(c(2:4), names_to = "Report Cat", values_to = "SD Diff")%>%
+  ggplot( aes(x=`SD Diff`, color=`Report Cat`, fill=`Report Cat`)) +
+    geom_histogram(alpha=0.6, binwidth = 3) +
+    scale_fill_viridis(discrete=TRUE) +
+    scale_color_viridis(discrete=TRUE) +
+    #theme_ipsum() +
+    theme(
+      panel.spacing = unit(0.1, "lines"),
+      strip.text.x = element_text(size = 8)
+    ) +
+      labs( y = "SD Diff",
+            title = "School Performance Variation by Content Reporting Category",
+            x = "",
+            caption = "NextGen HS Physics MCAS") +
+  facet_wrap(~`Report Cat`)
+
+```
+
+```{r}
+HSPhy_NextGen_SchoolSum%>%
+  select(`EM Perf Stat`, `MF%`, `EN%`, `WA%` )%>%
+  pivot_longer(c(2:4), names_to = "Report Cat", values_to = "% Points")%>%
+ ggplot( aes(x=`% Points`, color=`Report Cat`, fill=`Report Cat`)) +
+    geom_histogram(alpha=0.6, binwidth = 3) +
+    scale_fill_viridis(discrete=TRUE) +
+    scale_color_viridis(discrete=TRUE) +
+    #theme_ipsum() +
+    theme(
+      panel.spacing = unit(0.1, "lines"),
+      strip.text.x = element_text(size = 8)
+    ) +
+  
+    facet_wrap(~`Report Cat`)+
+      labs( y = "% Points Earned",
+            title = "Student Performance by Content Reporting Category",
+            x = "",
+            caption = "NextGen HS Physics MCAS")
+  #ggtitle("Practice Category Performance")
+
+
+```
+
+
+
+## Motion and Forces vs. Energy vs. Waves (Reporting Category)
+
+These images suggest that most schools exhibit similar levels of variability 
+in performance relative to the state across all reporting categories. Schools with the lowest percentage of students Exceeding expectations exhibit high variability in performance across all content reporting 
+categories, but seem to have lower variability on `Waves` items.
+
 
 ```{r}
 
@@ -623,7 +660,7 @@ HSPhy_NextGen_SchoolSum%>%
     ) +
  
     labs( y = "SD Diff",
-            title = "Student Performance Variation by Content Reporting Category",
+            title = "School Performance Variation by Content Reporting Category",
             x = "",
             caption = "NextGen HS Physics MCAS") +
   facet_wrap(~`Report Cat`)
@@ -647,11 +684,33 @@ HSPhy_NextGen_SchoolSum%>%
       axis.text.x=element_blank()
     ) +
      labs( y = "SD Diff",
-            title = "Student Content Reporting Cat. Variation by Achievement Level",
+            title = "School Content Reporting Cat. Variation by Achievement Level",
             x = "",
             caption = "NextGen HS Physics MCAS") +
     #xlab("")+
   facet_wrap(~`EM Perf Stat`)
+
+
+# HSPhy_NextGen_SchoolSum%>%
+#   select(`EM Perf Stat`, `MF%`, `EN%`, `WA%` )%>%
+#   pivot_longer(c(2:4), names_to = "Report Cat", values_to = "% Points")%>%
+#   ggplot( aes(x= `Report Cat`, y=`% Points`, fill= `Report Cat`)) +
+#     geom_boxplot() +
+#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+#     geom_jitter(color="black", size=0.4, alpha=0.9) +
+#     #theme_ipsum() +
+#     theme(
+#      
+#       plot.title = element_text(size=11),
+#       axis.title.x=element_blank(),
+#       axis.text.x=element_blank()
+#     ) +
+#      labs( y = "SD Diff",
+#             title = "School Content Reporting Cat. Performance by Achievement Level",
+#             x = "",
+#             caption = "NextGen HS Physics MCAS") +
+#     #xlab("")+
+#   facet_wrap(~`EM Perf Stat`)
 
 # HSPhy_NextGen_SchoolSum %>%
 #   ggplot( aes(x= `EM Perf Stat`, y=`MF%`, fill= `EM Perf Stat`)) +
