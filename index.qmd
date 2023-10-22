@@ -152,7 +152,7 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
     Introductory Physics MCAS is negatively associated with a school's variance in
     performance relative to student's in the state on `Mathematics and Data` items, `SD MD Diff`.
 
--   A school's summary performance on items in a given content `Reporting Category` is positively associated with     the `Reporting Category's` weight within the exam.
+-   A school's summary performance on items in a given content `Reporting Category` as measured by `MF%`, `EN%`,      `WA%`, is positively associated with the `Reporting Category's` weight within the exam.
 :::
 
 
