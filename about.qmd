@@ -23,6 +23,8 @@ For more information about the MCAS, see the Department of Elementary
 and Secondary Education's
 [(DESE)](https://www.doe.mass.edu/mcas/results.html) page.
 
+***This Needs to be Updated***, right now it is incomplete!
+
 | variable               | Measurement Level | Values                                                                                                                                         |
 |------------------|------------------|------------------------------------|
 | `Tested Students`     | Discrete           | number of students from a school that completed the MCAS assessment                                                                                                                 |
@@ -30,7 +32,7 @@ and Secondary Education's
 |                        |                   | `Small`: 50 or less students                                                                                                                              |
 |                        |                   | `Medium`: 50-150                                                                                                                                         |
 |                        |                   | `Large`: More than 150
-| `Practice Category Pts`   | Discrete           | The number of points available for items in a given scientific practice category                                                                                                                       |
+| `Practice Category Diff`   | Discrete           | The number of points available for items in a given scientific practice category                                                                                                                       |
 |                        |                   | `EVR Pts`: Evidence, Reasoning, and Modeling                                                                                                                              |
 |                        |                   | `MD Pts`: Mathematics and Data                                                                                                                                         |
 |                        |                   | `IQ Pts`: Investigations and Questioning                                                                                                                                        |

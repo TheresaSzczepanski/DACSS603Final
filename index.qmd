@@ -94,12 +94,9 @@ Massachusetts public schools.
 Data for the study were drawn from DESE’s Next Generation MCAS Test
 [Achievement Results statewide report](https://profiles.doe.mass.edu/statereport/mcas.aspx),
 [Item Analysis statewide report](https://profiles.doe.mass.edu/statereport/nextgenmcas_item.aspx), and 
-the [MCAS digital item library](https://mcas.digitalitemlibrary.com/home?subject=Science&grades=Physics&view=ALL). Throughout the commonwealth, 27,745 students from 112 schools participated in the 
-2022 and 2023 Next Generation HighSchool Introductory Physics MCAS. 
-The assessment consists of 42 multiple choice and constructed response items that 
-assess students on Physical Science standards from the [2016 STE Massachusetts
+the [MCAS digital item library](https://mcas.digitalitemlibrary.com/home?subject=Science&grades=Physics&view=ALL). The Next Generation High School Introductory Physics MCAS assessment consists of 42 multiple choice and constructed response items that assess students on Physical Science standards from the [2016 STE Massachusetts
 Curriculum Framework](https://www.doe.mass.edu/frameworks/scitech/2016-04.pdf) 
-in the `Reporting Categories` of Motions and Forces, `MF`, 
+in the content `Reporting Categories` of Motions and Forces, `MF`, 
 Energy, `EN`, and Waves, `WA`. Each item is associated with a specific content standard from the Massachusetts Curriculum Framework as well as an underlying science `Practice Category` of 
 Evidence Reasoning and Modeling, `ERM`, Mathematics and Data, `MD`, or Investigations 
 and Questioning, `IQ`. The State Item Report provides the percentage of points earned by 
@@ -107,13 +104,12 @@ students in a school for each item as well as the percentage of points earned by
 all students in the state for each item.
 
 
-The `HSPhy_NextGen_SchoolSum` data frame contains performance results and 
-demographic characteristics from
+The `HSPhy_NextGen_SchoolSum` data frame contains summary performance results from
 112 public schools across the commonwealth on the Next Generation High
 School Introductory Physics MCAS, which was administered in the Spring
-of 2022 and 2023. 87 of those schools
-tested students in both years and 25 of those schools only tested
-students in 1 of the 2 testing years.
+of 2022 and 2023. 87 schools
+tested students in both years and 25  schools only tested
+students in 1 of the 2 testing years, with 27,745 students completing the exam.
 
 For each school, there are values reported for 44 different variables
 which consist of information from three broad categories
@@ -122,21 +118,22 @@ which consist of information from three broad categories
     the size of the school, `School Size`, as determined by the number of students that
     completed the MCAS exam.
 
--   *Science Practice and Reporting Category Performance Metrics*: This
-    includes the percentage of points earned by students at a school in 
-    each content category, `MF%`, `EN%`, `WA%` and practice category 
+-   *Discipline-Specifc Performance Metrics*: This
+    includes the percentage of points earned by students at a school for items 
+    each content `Reporting Category`, `MF%`, `EN%`, `WA%` and science `Practice Category` 
     `ERM%`, `MD%`, `IQ%`, the difference between a school's percentage of points 
-    earned compared to student's in the state (`MFDiff`, `ENDiff`, etc...), and 
-    the variability in a school's performance relative to the state by category as 
-    measured by the standard deviation (`SD MF Diff`, `SD EN Diff`, etc...).
+    earned compared to the percentage of points earned by all students in the state (`MFDiff`, `ENDiff`, etc...),     and the variability in a school's performance relative to the state by category as 
+    measured by the standard deviation of the school's `Diff` across categories (`SD MF Diff`, `SD EN Diff`, etc...).
     
 
 -   *Aggregate Performance Level metrics*: This includes a school's percentage
     of students at each of the four `Performance Levels`, (`E%`: Exceeding
     Expectations, `M%`: Meeting Expectations, `PM%`: Partially Meeting
-    Expectations, and `NM%`: Not Meeting Expectations), as well as a
+    Expectations, and `NM%`: Not Meeting Expectations),
     the difference between these percentages and the percentage of students 
-    in Massachusetts at each performance level (`EDiff`, `MDiff`, `PMDiff`, `NMDiff`).
+    in Massachusetts at each performance level (`EDiff`, `MDiff`, `PMDiff`, `NMDiff`),
+    and an ordinal classification of school's, `EM Perf Stat` based on the percentage of students that were 
+    classified as Exceeding or Meeting expectations on the exam (`HighEM`, `HighM`, `Mid`, `Mid-Low`, `Low`).
 
 
 
@@ -151,12 +148,11 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 </style>
 ```
 ::: blue
--   A school's percent of student's exceeding expectations on the
-    Introductory Physics MCAS is negatively associated with variance in
-    Mathematics and Data items.
+-   A school's percentage of student's classified as `Exceeding` expectations on the
+    Introductory Physics MCAS is negatively associated with a school's variance in
+    performance relative to student's in the state on `Mathematics and Data` items, `SD MD Diff`.
 
--   School's mean performance diffs are not the same across science
-    practice categories.
+-   A school's summary performance on items in a given content `Reporting Category` is positively associated with     the `Reporting Category's` weight within the exam.
 :::
 
 
@@ -255,16 +251,16 @@ print(summarytools::dfSummary(HSPhy_NextGen_SchoolSum,
 
 ## Key Variables
 
-To explore the relationship between the distribution of Student `Performance Level`
-and student's performance in content categories, we examine the percentage of points 
+To explore the relationship between the distribution of school's students' `Performance Level`
+and school's performance in content categories, we examine the percentage of points 
 earned by students at school's as well as the standard deviation of the difference between points earned by students at a school and points earned by students in the state across `Reporting Categories` and `Practice Categories`. We grouped schools by their `EM Perf Stat`, an ordinal variable classifying schools 
 by the percentage of students they have that were classified as either Exceeding or 
 Meeting expectations on the MCAS. These numbers seem to suggest that items classified 
-with the Scientific Practice of `Mathematics and Data` seem to be more challenging to students than those 
-classified as `Evidence, Reasoning, and Modeling`. When considering content Reporting Categories,
-there do not seem to be discernible distinctions between student achievement and performance 
-across categories, except that school's with the weakest achievement, seem to have more success 
-on items from the `Waves` reporting category.
+with the Science `Practice Category` of `Mathematics and Data` seem to be more challenging to students than those 
+classified as `Evidence, Reasoning, and Modeling`. These practice categories are strongly and equally emphasized within the exam; items tagged with these categories account for **82%** of the available points on the exam with exactly **41%** of available points coming from each category.
+
+When considering content `Reporting Categories`, there do not seem to be discernible distinctions between `EM Perf Stat` and school's achievement and performance 
+across categories. All school's seem to perform the strongest on `Motion and Forces` items, followed by `Energy`, and weakest on `Waves` items. Notably, this is also the order of the relative weights of the content areas within the exam; `MF`, `EN`, and `WA` items account for **50%**, **30%**, and **20%** of exam points respectively.
 
 ```{r}
 
@@ -299,8 +295,8 @@ HSPhy_NextGen_SchoolSum%>%
 ## Distribution of Performance Level %
 
 When examining the statewide performance distribution, we can see from the right-skew 
-that it is rare for schools to have high percentages of students Not Meeting expectations
-and even rarer for schools to have high percentages of students Exceeding expectations.
+that it is rare for schools to have high percentages of students classified as `Not Meeting` expectations
+and even rarer for schools to have high percentages of students classified as `Exceeding` expectations.
 
 ```{r}
 HSPhy_NextGen_SchoolSum%>%
@@ -329,7 +325,7 @@ HSPhy_NextGen_SchoolSum%>%
 ## Distribution of School Performance and Variability by Practice Cat
 
 Although `Mathematics and Data` and `Evidence, Reasoning, and Modeling` items 
-have equal weighting in the HS Introductory Physics exam, student performance distributions
+have strong and equal weighting in the HS Introductory Physics exam, student performance distributions
 are noticeably different across these practice categories.
 
 ```{r}
@@ -359,7 +355,7 @@ HSPhy_NextGen_SchoolSum%>%
 
 
 When considering the variability of a school's performance on items relative 
-to the state by Practice Category, `SD MD Diff`, and `SD ERM Diff`, we can 
+to the state by `Practice Category`, `SD MD Diff`, and `SD ERM Diff`, we can 
 see that `Mathematics and Data` is skewed more to the right.
 
 ```{r}
@@ -384,11 +380,11 @@ see that `Mathematics and Data` is skewed more to the right.
 ```
 ## Mathematics and Data vs. Evidence Reasoning and Modeling (Practice Category)
 
-These images, seem to suggest that schools with the highest percentage of students Exceeding 
-expectations on the MCAS have the lowest levels of variation in performance on 
-Mathematics and Data Items and schools with the lowest percentage of students 
-Exceeding expectations on the MCAS have the highest levels of variation in performance
-on Mathematics and Data Items.
+These images, seem to suggest that schools with the **highest** percentage of students classified as `Exceeding` 
+expectations on the MCAS have the **lowest** levels of variation in performance on 
+`Mathematics and Data` Items and schools with the **lowest** percentage of students classified as 
+`Exceeding` expectations on the MCAS have the **highest** levels of variation in performance
+on `Mathematics and Data Items`.
 
 ```{r}
 
@@ -439,8 +435,8 @@ HSPhy_NextGen_SchoolSum%>%
   facet_wrap(~`EM Perf Stat`)
 ```
 These images, seem to suggest that students at all schools seem to have 
-more difficulty with Mathematics and Data items as compared to Evidence, Reasoning, 
-and Modeling Items.
+more difficulty with `Mathematics and Data` items as compared to `Evidence, Reasoning, 
+and Modeling Items`.
 
 ```{r}
 HSPhy_NextGen_SchoolSum%>%
@@ -581,8 +577,8 @@ HSPhy_NextGen_SchoolSum%>%
 ## Distribution of School Performance and Variability by Reporting Cat
 
 Here we can visualize the variability of a school's performance on items partitioned 
-instead by Content Reporting Category, `MF%`/`SD MF Diff`,  `EN%`/`SD EN Diff`, and 
-`WA%`/`SD WA Diff`.
+by Content `Reporting Category` of `Motion and Forces`, `Energy`, and `Waves` via:
+`MF%`/`SD MF Diff`,  `EN%`/`SD EN Diff`, and `WA%`/`SD WA Diff`.
 
 
 ```{r}
@@ -635,7 +631,7 @@ HSPhy_NextGen_SchoolSum%>%
 ## Motion and Forces vs. Energy vs. Waves (Reporting Category)
 
 These images suggest that most schools exhibit similar levels of variability 
-in performance relative to the state across all reporting categories. Schools with the lowest percentage of students Exceeding expectations exhibit high variability in performance across all content reporting 
+in performance relative to the state across all reporting categories. Schools with the ***lowest percentage*** of students `Exceeding` expectations exhibit ***high variability*** in performance across all content reporting 
 categories, but seem to have lower variability on `Waves` items.
 
 
