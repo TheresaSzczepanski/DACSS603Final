@@ -41,38 +41,35 @@ the Massachusetts Education Reform Act.
 The MCAS tests are a significant tool for educational equity. Scores on
 the Grade 10 Math MCAS test "predict longer-term educational attainments
 and labor market success, above and beyond typical markers of student
-advantage. For example, among demographically similar students who
-attended the same high school and have the same level of ultimate
-educational attainment, those with higher MCAS mathematics scores go on
-to have much higher average earnings than those with lower scores."
+advantage" and warnings differences among students are largely and "sometimes completely
+accounted for" by differences in 10th grade MCAS scores and educational attainments.
 [@Boats20].
 
-With the introduction of the new Common Core standards came the demand
-for appropriate curricular materials and teaching practices. Research
+With the introduction of the new Common Core standards and accountability testing came the demand
+for aligned curricular materials and teaching practices. Research
 indicates that the choice of instructional materials can have an impact
 "as large as or larger than the impact of teacher quality" [@Blindly12].
 Massachusetts, along with Arkansas, Delaware, Kentucky, Louisiana,
 Maryland, Mississippi, Nebraska, New Mexico, Ohio, Rhode Island,
-Tennessee and Texas belongs to the Council of Chief State School
+Tennessee, and Texas belongs to the Council of Chief State School
 Officers' (CCSO), [High Quality Instructional Materials and Professional
 Development
 network](https://learning.ccsso.org/high-quality-instructional-materials)
-which aims to close the "opportunity gap" amongst students by ensuring that 
+which aims to close the "opportunity gap" among students by ensuring that 
 every teacher has access to high-quality, standards aligned
 instructional materials and receives relevant professional development
 to support their use of these materials [@IMPD21].
 
 All Massachusetts Public School students must complete a High School science MCAS
-exam providing a wealth of standardized data on student's content understanding.
-All school's receive annual summary reports on student performance as well as 
-disaggregated student item performance reports [@MCASIT]. Significant work has been 
-done using MCAS data and the Student Opportunity Act to address funding inequities
-across the Commonwealth [@Boats20]. With funding gaps outlined in the late 1990's 
+exam providing a wealth of standardized data on students' discipline specific skill development.
+All schools receive annual summary reports on student performance. Significant work has been 
+done using the MCAS achievement data and the Student Opportunity Act to identify achievement gaps and address funding inequities across the Commonwealth [@Boats20]. With funding gaps outlined in the late 1990's 
 closing, one could consider how the MCAS data could be leveraged to support the state's 
-current high quality instructional materials initiatives by providing schools with guidance on curricular areas in most need of support.
+current high quality instructional materials initiatives. The state compiles school's performance
+disaggregated by each MCAS question item [@MCASIT].
 
-Using the Curricular information provided in state wide Next Generation MCAS High School Introductory Physics
-student performance data, we hope to address the following broad
+Using the curricular information provided in state wide Next Generation MCAS High School Introductory Physics
+Item reports together with school-level student performance data, we hope to address the following broad
 questions:
 
 ```{=html}
@@ -81,12 +78,11 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 </style>
 ```
 ::: blue
--   Is there a relationship between differences in student performance
-    across Science Practice Categories and student achievement?
+-   Is there a relationship between differences in a school's performance
+    across Science Practice Categories and a school's overall achievement on the Introductory Physics exam?
 
--   How can trends in student performance be used to identify
-    Introductory Physics content areas in need of curricular
-    adjustments?
+-   How can trends in a school's performance be used to provide schools with guidance on
+    discipline-specific curricular areas to target to improve student achievement?
 :::
 
 
