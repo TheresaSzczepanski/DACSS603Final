@@ -6,6 +6,8 @@ date: "10/22/2023"
 
 format:
   html:
+    embed-resources: true
+    self-contained-math: true
     df-print: paged
     toc: true
     code-fold: true
