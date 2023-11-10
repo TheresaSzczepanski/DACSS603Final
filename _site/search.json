@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "DACSS603Final",
     "section": "",
-    "text": "Code\nsource('dependencies.R')\nknitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)"
+    "text": "Code\nsource('dependencies.R')\nknitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)\n#install.packages(\"stargazer\")\nlibrary(stargazer)"
   },
   {
     "objectID": "about.html",

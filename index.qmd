@@ -794,13 +794,74 @@ HSPhy_NextGen_SchoolSum%>%
 ```{r}
 HSPhy_NextGen_SchoolSum
 
-fit_md = lm(`E%` ~ `MD Diff SD`, data = HSPhy_NextGen_SchoolSum)
+fit_md = lm(`E%` ~ log(`MD Diff SD`), data = HSPhy_NextGen_SchoolSum)
 summary(fit_md)
 
 fit_erm = lm(`E%` ~ `ERM Diff SD`, data = HSPhy_NextGen_SchoolSum)
-summary(fit_erm)
+#summary(fit_erm)
 
-fit_erm_md = lm(`E%` ~ `MD Diff SD` + `ERM Diff SD` )
+fit_erm_md = lm(`E%` ~ log(`MD Diff SD`) + log(`ERM Diff SD`) + log(`MD Diff SD`)*log(`ERM Diff SD`), data = HSPhy_NextGen_SchoolSum)
+#summary(fit_erm_md)
+
+
+fit_md_percent = lm(`E%` ~ log(`MD%`) + log(`ERM%`) + log(`MD%`)*log(`ERM%`), data = HSPhy_NextGen_SchoolSum)
+
+#summary(fit_md_percent)
+
+HSPhy_NextGen_SchoolSum%>%
+  select(`MD%`, `E%`)
+
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD%`, y = log(`E%`))) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `ERM%`, y = log(`E%`))) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = log(`MD Diff SD`), y = (`E%`))) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+
 ```
+```{r}
 
+
+#HSPhy_NextGen_SchoolSum.isna()
+
+fit_wa = lm((`E%`) ~ log(`WA%`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_wa)
+
+fit_md = lm((`E%`) ~ log(`MD%`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_md)
+
+#fit_erm = lm(`E%` ~ `ERM Diff SD`, data = HSPhy_NextGen_SchoolSum)
+#summary(fit_erm)
+
+#fit_erm_md = lm(`E%` ~ log(`MD Diff SD`) + log(`ERM Diff SD`) + log(`MD Diff SD`)*log(`ERM Diff SD`), data = HSPhy_NextGen_SchoolSum)
+#summary(fit_erm_md)
+
+
+#fit_md_percent = lm(`E%` ~ log(`MD%`) + log(`ERM%`) + log(`MD%`)*log(`ERM%`), data = HSPhy_NextGen_SchoolSum)
+
+#summary(fit_md_percent)
+
+#HSPhy_NextGen_SchoolSum%>%
+#  select(`MD%`, `E%`)
+
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = log(`WA%`), y = log(`E%`))) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+#ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `ERM%`, y = log(`E%`))) +
+ # geom_point() +
+#  geom_smooth(method="lm", se=T)
+
+#ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = log(`MD Diff SD`), y = (`E%`))) +
+ # geom_point() +
+#  geom_smooth(method="lm", se=T)
+
+
+```
 # References
