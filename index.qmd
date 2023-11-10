@@ -28,6 +28,8 @@ editor:
 
 source('dependencies.R')
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+#install.packages("stargazer")
+library(stargazer)
 ```
 
 # Research Questions
@@ -437,8 +439,8 @@ HSPhy_NextGen_SchoolSum%>%
   facet_wrap(~`EM Perf Stat`)
 ```
 These images, seem to suggest that students at all schools seem to have 
-more difficulty with `Mathematics and Data` items as compared to `Evidence, Reasoning, 
-and Modeling Items`.
+more difficulty with `Mathematics and Data` items as compared to 
+`Evidence, Reasoning, and Modeling Items`.
 
 ```{r}
 HSPhy_NextGen_SchoolSum%>%
@@ -786,6 +788,19 @@ HSPhy_NextGen_SchoolSum%>%
 #     ggtitle("A boxplot with jitter") +
 #     xlab("")
 
+```
+# Hypothesis Testing
+
+```{r}
+HSPhy_NextGen_SchoolSum
+
+fit_md = lm(`E%` ~ `MD Diff SD`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_md)
+
+fit_erm = lm(`E%` ~ `ERM Diff SD`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_erm)
+
+fit_erm_md = lm(`E%` ~ `MD Diff SD` + `ERM Diff SD` )
 ```
 
 # References
