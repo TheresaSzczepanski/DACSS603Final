@@ -800,19 +800,51 @@ HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
 
 ```
 
-## Anova: SD-Diff ERM, MD
+## Anova: SD-Diff MD
 ```{r}
 HSPhy_NextGen_SchoolSum
 
-ANOVA_MD <- aov(`MD Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
+ANOVA_MD <- aov(`MD Diff SD` ~ `EM Perf Stat` + `School Size` + `EM Perf Stat` * `School Size`, data=HSPhy_NextGen_SchoolSum)
 
 summary(ANOVA_MD)
 
+HSPhy_NextGen_SchoolSum%>%
+  group_by(`School Size`, `EM Perf Stat`)%>%
+  summarize(`Mean MD%` = mean(`MD%`),
+     `Mean MD Diff SD` = mean(`MD Diff SD`),
+     `Mean ERM%` = mean(`ERM%`),
+     `Mean ERM Diff SD` = mean(`ERM Diff SD`)
+    
+             )
+HSPhy_NextGen_SchoolSum%>%
+  group_by(`School Size`)%>%
+  summarize(`Mean MD%` = mean(`MD%`),
+     `Mean MD Diff SD` = mean(`MD Diff SD`),
+     `Mean ERM%` = mean(`ERM%`),
+     `Mean ERM Diff SD` = mean(`ERM Diff SD`)
+             )
+```
 
+## SD-Diff ERM
+```{r}
 ANOVA_ERM <- aov(`ERM Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
 
 summary(ANOVA_ERM)
 
+```
+
+
+## SD-Diff MD + ERM
+
+```{r}
+ANOVA_ERM <- aov(`ERM Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
+
+summary(ANOVA_ERM)
+
+```
+
+
+```{r}
 ANOVA_WA <- aov(`WA Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
 
 summary(ANOVA_WA)
@@ -986,6 +1018,13 @@ summary(fit_md_erm_wa_percent)
 
 ```
 
+## MD-Diff, WA Diff, and School Size
+```{r}
+fit_md_wa_size = lm(`EorM%` ~ `MD Diff SD` + `WA Diff SD` + `School Size` + `MD Diff SD`*`School Size`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_wa_size)
+
+HSPhy_NextGen_SchoolSum
+```
 # Scatter Plots
 ## MD + WA
 
