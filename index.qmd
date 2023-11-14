@@ -687,26 +687,26 @@ HSPhy_NextGen_SchoolSum%>%
   facet_wrap(~`EM Perf Stat`)
 
 
-# HSPhy_NextGen_SchoolSum%>%
-#   select(`EM Perf Stat`, `MF%`, `EN%`, `WA%` )%>%
-#   pivot_longer(c(2:4), names_to = "Report Cat", values_to = "% Points")%>%
-#   ggplot( aes(x= `Report Cat`, y=`% Points`, fill= `Report Cat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     #theme_ipsum() +
-#     theme(
-#      
-#       plot.title = element_text(size=11),
-#       axis.title.x=element_blank(),
-#       axis.text.x=element_blank()
-#     ) +
-#      labs( y = "SD Diff",
-#             title = "School Content Reporting Cat. Performance by Achievement Level",
-#             x = "",
-#             caption = "NextGen HS Physics MCAS") +
-#     #xlab("")+
-#   facet_wrap(~`EM Perf Stat`)
+HSPhy_NextGen_SchoolSum%>%
+  select(`EM Perf Stat`, `MF%`, `EN%`, `WA%` )%>%
+  pivot_longer(c(2:4), names_to = "Report Cat", values_to = "% Points")%>%
+  ggplot( aes(x= `Report Cat`, y=`% Points`, fill= `Report Cat`)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+    geom_jitter(color="black", size=0.4, alpha=0.9) +
+    #theme_ipsum() +
+    theme(
+
+      plot.title = element_text(size=11),
+      axis.title.x=element_blank(),
+      axis.text.x=element_blank()
+    ) +
+     labs( y = "Report Cat%",
+            title = "School Content Reporting Cat. Performance by Achievement Level",
+            x = "",
+            caption = "NextGen HS Physics MCAS") +
+    #xlab("")+
+  facet_wrap(~`EM Perf Stat`)
 
 # HSPhy_NextGen_SchoolSum %>%
 #   ggplot( aes(x= `EM Perf Stat`, y=`MF%`, fill= `EM Perf Stat`)) +
@@ -792,19 +792,236 @@ HSPhy_NextGen_SchoolSum%>%
 # Hypothesis Testing
 
 ```{r}
+HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
+  ungroup()
+
+HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
+  mutate(`EorM%` = `E%` + `M%`)
+
+```
+
+## Anova: SD-Diff ERM, MD
+```{r}
 HSPhy_NextGen_SchoolSum
 
-fit_md = lm(`E%` ~ log(`MD Diff SD`), data = HSPhy_NextGen_SchoolSum)
+ANOVA_MD <- aov(`MD Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
+
+summary(ANOVA_MD)
+
+
+ANOVA_ERM <- aov(`ERM Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
+
+summary(ANOVA_ERM)
+
+ANOVA_WA <- aov(`WA Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
+
+summary(ANOVA_WA)
+
+
+ANOVA_EN <- aov(`EN Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
+
+summary(ANOVA_EN)
+
+ANOVA_MF <- aov(`MF Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
+
+summary(ANOVA_MF)
+
+ HSPhy_NextGen_SchoolSum%>%
+  select(`EM Perf Stat`, `MF Diff SD`, `EN Diff SD`, `WA Diff SD` )%>%
+  pivot_longer(c(2:4), names_to = "Report Cat", values_to = "SD Diff")%>%
+   group_by(`Report Cat`, `EM Perf Stat`)%>%
+   summarize(`SD SD Diff` = sd(`SD Diff`, na.rm = TRUE))
+ 
+ 
+
+  HSPhy_NextGen_SchoolSum%>%
+  select(`EM Perf Stat`, `ERM Diff SD`, `MD Diff SD` )%>%
+  pivot_longer(c(2:3), names_to = "Practice Cat", values_to = "SD Diff")%>%
+   group_by(`Practice Cat`, `EM Perf Stat`)%>%
+   summarize(`SD SD Diff` = sd(`SD Diff`, na.rm = TRUE))
+```
+
+```{r}
+
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `ERM Diff SD`, y = (`EorM%`))) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD Diff SD`, y = (`EorM%`))) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD Diff SD`, y = (`E%`))) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `ERM Diff SD`, y = (`E%`))) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = (`WA Diff SD`), y = ((`E%`)))) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+
+
+```
+## MD Diff Alone
+
+```{r}
+fit_md = lm(`EorM%` ~ (`MD Diff SD`), data = HSPhy_NextGen_SchoolSum)
 summary(fit_md)
 
-fit_erm = lm(`E%` ~ `ERM Diff SD`, data = HSPhy_NextGen_SchoolSum)
+```
+
+## MD and ERM Diff
+This states that MD is significant but ERM is not statistically significant?
+```{r}
+
+
+fit_md_erm = lm(`EorM%` ~ (`ERM Diff SD` + `MD Diff SD`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_erm)
+
+```
+
+## Reporting Category DIFF alone and with interactions
+### EN
+```{r}
+fit_en = lm(`EorM%` ~ (`EN Diff SD`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_en)
+
+```
+
+
+### MF
+```{r}
+fit_mf = lm(`EorM%` ~ (`MF Diff SD`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_mf)
+
+```
+### WA
+```{r}
+fit_wa = lm(`EorM%` ~ (`WA Diff SD`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_wa)
+
+```
+### MF/EN
+```{r}
+
+fit_mf_en = lm(`EorM%` ~ (`MF Diff SD`) + `EN Diff SD` + `MF Diff SD`*`EN Diff SD`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_mf_en)
+
+```
+### MF/WA
+```{r}
+
+fit_mf_wa = lm(`EorM%` ~ (`MF Diff SD`) + `WA Diff SD` + `MF Diff SD`*`WA Diff SD`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_mf_wa)
+
+```
+## Practice Cat Interacting with Reporting Cat
+
+### MD/WA
+```{r}
+
+
+fit_md_wa = lm(`EorM%` ~ (`MD Diff SD`) + `WA Diff SD` + `MD Diff SD`*`WA Diff SD`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_wa)
+
+
+```
+
+### MD/MF
+```{r}
+
+
+fit_md_mf = lm(`EorM%` ~ (`MD Diff SD`) + `MF Diff SD` + `MD Diff SD`*`MF Diff SD`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_mf)
+
+
+```
+### MD/EN
+```{r}
+
+
+fit_md_en = lm(`EorM%` ~ (`MD Diff SD`) + `EN Diff SD` + `MD Diff SD`*`EN Diff SD`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_en)
+
+
+```
+## Practice Cat %
+
+### MD/ERM
+
+```{r}
+fit_md_erm_percent = lm(`EorM%` ~ `MD%` + `ERM%` + `MD%`*`ERM%`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_erm_percent)
+
+```
+
+### MD/WA
+```{r}
+fit_md_wa_percent = lm(`EorM%` ~ `MD%` + `WA%` + `MD%`*`WA%`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_wa_percent)
+
+```
+### ERM/WA
+```{r}
+fit_erm_wa_percent = lm(`EorM%` ~ `ERM%` + `WA%` + `ERM%`*`WA%`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_erm_wa_percent)
+
+```
+### MD, ERM, MF
+```{r}
+fit_md_erm_mf_percent = lm(`EorM%` ~ `ERM%` + `MD%` + `MF%` + `MD%`*`ERM%`+ `MD%`*`MF%` + `ERM%`*`MF%`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_erm_mf_percent)
+
+```
+### MD, ERM, WA
+```{r}
+fit_md_erm_wa_percent = lm(`EorM%` ~ `ERM%` + `MD%` + `WA%` + `MD%`*`ERM%`+ `MD%`*`WA%` + `ERM%`*`WA%`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_erm_wa_percent)
+
+```
+
+# Scatter Plots
+## MD + WA
+
+```{r}
+fit_md_wa$coefficients
+summary(fit_md_wa)
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = -10.019434*`MD Diff SD` +  -1.7848*`WA Diff SD` + 0.4548*`MD Diff SD`*`WA Diff SD` + 104.1191, y = `EorM%`)) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD Diff SD` +  `WA Diff SD`, y = `EorM%`)) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+```
+```{r}
+
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = 1.290583*`MD%` +  -0.015233*`WA%` +  0.006053*`WA%`*`MD%` + -35.163765 , y = `EorM%`)) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+```
+
+
+```{r}
+
+
+#fit_erm = lm(`E%` ~ `ERM Diff SD`, data = HSPhy_NextGen_SchoolSum)
 #summary(fit_erm)
 
-fit_erm_md = lm(`E%` ~ log(`MD Diff SD`) + log(`ERM Diff SD`) + log(`MD Diff SD`)*log(`ERM Diff SD`), data = HSPhy_NextGen_SchoolSum)
+#fit_erm_md = lm(`E%` ~ log(`MD Diff SD`) + log(`ERM Diff SD`) + log(`MD Diff SD`)*log(`ERM Diff SD`), data = HSPhy_NextGen_SchoolSum)
 #summary(fit_erm_md)
 
 
-fit_md_percent = lm(`E%` ~ log(`MD%`) + log(`ERM%`) + log(`MD%`)*log(`ERM%`), data = HSPhy_NextGen_SchoolSum)
+#fit_md_percent = lm(`E%` ~ log(`MD%`) + log(`ERM%`) + log(`MD%`)*log(`ERM%`), data = HSPhy_NextGen_SchoolSum)
 
 #summary(fit_md_percent)
 
@@ -825,6 +1042,8 @@ ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = log(`MD Diff SD`), y = (`E%`))) +
 
 
 ```
+
+
 ```{r}
 
 
