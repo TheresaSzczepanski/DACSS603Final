@@ -1059,7 +1059,7 @@ summary(ANOVA_ERM_Size_Int)
 ### T Test EM Diff SD vs. MD Diff SD Option 1
 I performed a paired t test for significance in the difference in the means of `SD Diff` for `Evidence Reasoning, and Modeling` and `Mathematics and Data`.
 
-***Option 1: Filter by Perf Stat and see significance***
+***Option 1: Filter by Perf Stat and see significance: Low: MD-Diff Greater than ERM-Diff, Not Low: MD-Diff Less than ERM Diff***
 
 ```{r}
  HSPhy_NextGen_SchoolSum_Diff<-HSPhy_NextGen_SchoolSum %>%
@@ -1085,7 +1085,7 @@ test2<-HSPhy_NextGen_SchoolSum %>%
 ## filtered for High Performing Schools
 #test2
 
-t.test(test2$`SD Diff`~ test2$`Practice Cat`, paired = TRUE)
+t.test(test2$`SD Diff`~ test2$`Practice Cat`, paired = TRUE, alternative = "greater")
 
 
 
@@ -1097,7 +1097,7 @@ test3<-HSPhy_NextGen_SchoolSum %>%
 ## filtered for Low Performing Schools
 #test3
 
-t.test(test3$`SD Diff`~ test3$`Practice Cat`, paired = TRUE)
+t.test(test3$`SD Diff`~ test3$`Practice Cat`, paired = TRUE, alternative = "less")
 ```
 ### Welch's T-Test  MD Diff  by Low Performing SD Option 2
 I performed a paired Welch's test for significance in the difference in the means of `MD SD Diff` in Lowest Performing Schools vs. those that were not.
@@ -1154,30 +1154,77 @@ twogroupt_ERM
 ```
 ## Regression Model
 
-### MD Diff Alone
+### MD Diff Alone and with ERM
+
 
 ```{r}
-fit_md = lm(`EorM%` ~ (`MD Diff SD`), data = HSPhy_NextGen_SchoolSum)
+test4
+fit_md = lm(`EorM%` ~ (`MD Diff SD`), data = test4)
 summary(fit_md)
+
+fit_md_erm = lm(`EorM%` ~ (`MD Diff SD` + `ERM Diff SD` + `MD Diff SD` * `ERM Diff SD`), data = test4)
+summary(fit_md_erm)
+
+fit_md_size = lm(`EorM%` ~ (`MD Diff SD` + `Tested Students`), data = test4)
+summary(fit_md_size)
 
 ```
 
-### MD and ERM Diff
+### MD Diff and School Size via Tested Students
 
-This states that MD is significant but ERM is not statistically
+This states that MD is significant and `Tested Students` is statistically
 significant?
 
 ```{r}
 
+fit_md_size = lm(`EorM%` ~ (`MD Diff SD` + `Tested Students`), data = test4)
+summary(fit_md_size)
 
-fit_md_erm = lm(`EorM%` ~ (`ERM Diff SD` + `MD Diff SD`), data = HSPhy_NextGen_SchoolSum)
-summary(fit_md_erm)
+```
+
+### Should I use the discrete variable Tested Students or the Factor `School Size`???
+
+
+```{r}
+
+fit_md_size_fact = lm(`EorM%` ~ (`MD Diff SD` + `School Size`), data = test4)
+summary(fit_md_size_fact)
+
+```
+
+
+### Interaction MD Diff, EMPerf Stat
+### Visualizations
+
+***Question, do I plot the actual model with coefficients?***
+
+
+```{r}
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD Diff SD`, y = `EorM%`)) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+```
+
+#### EM Perf Stat Color: MD Diff SD, EorM%
+```{r}
+ggplot(data = test4, aes(x = `MD Diff SD`, y = `EorM%`, color = `EM Perf Stat`)) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
 
 ```
 
 
 
-### Visualizations
+
+```{r}
+ggplot(data = test4, aes(x = `MD Diff SD`, y = `EorM%`, color = `School Size`)) +
+  geom_point() +
+  geom_smooth(method="lm", se=T)
+
+```
+
+
 
 ## Hypothesis 2: Reporting Cateogy and School Performance
 
@@ -1238,9 +1285,7 @@ ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `ERM Diff SD`, y = (`EorM%`))) +
   geom_smooth(method="lm", se=T)
 
 
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD Diff SD`, y = (`EorM%`))) +
-  geom_point() +
-  geom_smooth(method="lm", se=T)
+
 
 ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD Diff SD`, y = (`E%`))) +
   geom_point() +
