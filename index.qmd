@@ -30,6 +30,7 @@ source('dependencies.R')
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 #install.packages("stargazer")
 library(stargazer)
+library(flexmix)
 ```
 
 # Research Questions
@@ -1191,27 +1192,23 @@ fit_md_size_fact = lm(`EorM%` ~ (`MD Diff SD` + `School Size`), data = test4)
 summary(fit_md_size_fact)
 
 ```
+### Model Comparison: MD vs. MD_Size: Anova F test
+```{r}
+anova(fit_md, fit_md_size_fact)
+```
 
 
-### Interaction MD Diff, EMPerf Stat
 ### Visualizations
 
 ***Question, do I plot the actual model with coefficients?***
+*** How do I include School Size in the visual?***
 
-
-```{r}
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD Diff SD`, y = `EorM%`)) +
-  geom_point() +
-  geom_smooth(method="lm", se=T)
-
-```
 
 #### EM Perf Stat Color: MD Diff SD, EorM%
 ```{r}
 ggplot(data = test4, aes(x = `MD Diff SD`, y = `EorM%`, color = `EM Perf Stat`)) +
   geom_point() +
-  geom_smooth(method="lm", se=T)
-
+  geom_smooth(method="lm", se=T) 
 ```
 
 
@@ -1220,7 +1217,8 @@ ggplot(data = test4, aes(x = `MD Diff SD`, y = `EorM%`, color = `EM Perf Stat`))
 ```{r}
 ggplot(data = test4, aes(x = `MD Diff SD`, y = `EorM%`, color = `School Size`)) +
   geom_point() +
-  geom_smooth(method="lm", se=T)
+  geom_smooth(method="lm", se=T) #+
+  #facet_grid( ~ `EM Perf Stat`, scale = "free") 
 
 ```
 
@@ -1276,33 +1274,7 @@ summary(ANOVA_MF)
 
 
 
-### Visualizations
 
-```{r}
-
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `ERM Diff SD`, y = (`EorM%`))) +
-  geom_point() +
-  geom_smooth(method="lm", se=T)
-
-
-
-
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD Diff SD`, y = (`E%`))) +
-  geom_point() +
-  geom_smooth(method="lm", se=T)
-
-
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `ERM Diff SD`, y = (`E%`))) +
-  geom_point() +
-  geom_smooth(method="lm", se=T)
-
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = (`WA Diff SD`), y = ((`E%`)))) +
-  geom_point() +
-  geom_smooth(method="lm", se=T)
-
-
-
-```
 
 
 ## Reporting Category DIFF alone and with interactions
@@ -1335,12 +1307,12 @@ summary(fit_wa)
 
 ```{r}
 
-fit_mf_en = lm(`EorM%` ~ (`MF Diff SD`) + `EN Diff SD` + `MF Diff SD`*`EN Diff SD`, data = HSPhy_NextGen_SchoolSum)
+fit_mf_en = lm(`EorM%` ~ (`MF Diff SD` + `EN Diff SD` + `MF Diff SD`*`EN Diff SD`), data = HSPhy_NextGen_SchoolSum)
 summary(fit_mf_en)
 
 ```
 
-### MF/WA
+### MF/WA interact
 
 ```{r}
 
@@ -1351,186 +1323,158 @@ summary(fit_mf_wa)
 
 ## Practice Cat Interacting with Reporting Cat
 
-### MD/WA
+### MD_WA_interact
 
 ```{r}
 
 
-fit_md_wa = lm(`EorM%` ~ (`MD Diff SD`) + `WA Diff SD` + `MD Diff SD`*`WA Diff SD`, data = HSPhy_NextGen_SchoolSum)
-summary(fit_md_wa)
+fit_md_wa_interact = lm(`EorM%` ~ (`MD Diff SD` + `WA Diff SD`  + `MD Diff SD`*`WA Diff SD`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_wa_interact)
+```
+
+### Model Comparison: MD vs. MD_WA_interact: Anova F test
+```{r}
+anova(fit_md, fit_md_wa_interact)
+```
+
+
+### MD/: MF, not significant...possible multicollinearity
+
+```{r}
+
+
+fit_md_mf_interact = lm(`EorM%` ~ (`MD Diff SD` + `MF Diff SD` + `MD Diff SD`*`MF Diff SD`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_mf_interact)
 
 
 ```
 
-### MD/MF
+### MD/EN, EN not significant
 
 ```{r}
 
-
-fit_md_mf = lm(`EorM%` ~ (`MD Diff SD`) + `MF Diff SD` + `MD Diff SD`*`MF Diff SD`, data = HSPhy_NextGen_SchoolSum)
-summary(fit_md_mf)
+fit_md_en_interact = lm(`EorM%` ~ (`MD Diff SD` + `EN Diff SD` + `MD Diff SD`*`EN Diff SD`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_en_interact)
 
 
 ```
 
-### MD/EN
+
+
+
+
+### MD-Diff, WA Diff, and School Size
 
 ```{r}
-
-
-fit_md_en = lm(`EorM%` ~ (`MD Diff SD`) + `EN Diff SD` + `MD Diff SD`*`EN Diff SD`, data = HSPhy_NextGen_SchoolSum)
-summary(fit_md_en)
+fit_md_wa_size_interact = lm(`EorM%` ~ `MD Diff SD` + `WA Diff SD` + `School Size` + `MD Diff SD`*`School Size`, data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_wa_size_interact)
 
 
 ```
-
-## Practice Cat %
-
-### MD/ERM
-
+### Model Comparison: MD_WA_interact vs. MD_WA_Size_interact: Anova F test
 ```{r}
-fit_md_erm_percent = lm(`EorM%` ~ `MD%` + `ERM%` + `MD%`*`ERM%`, data = HSPhy_NextGen_SchoolSum)
-summary(fit_md_erm_percent)
+anova(fit_md_wa_interact, fit_md_wa_size_interact)
 
 ```
 
-### MD/WA
+### Model Comparison: MD_WA_interact vs. MD_WA_Size_interact: BIC
+```{r}
+summary(fit_md_wa_interact)
+summary(fit_md_wa_size_interact)
+summary(fit_md_size_fact)
+BIC(fit_md_wa_interact)
+BIC(fit_md_wa_size_interact)
+BIC(fit_md_size_fact)
+AIC(fit_md_wa_interact)
+AIC(fit_md_wa_size_interact)
+AIC(fit_md_size_fact)
+```
+# Diagnostic of Final Model: MD_WA_Size_interact
+Cook's distance says the 16th, 47th, and 104th observations are in violation, since $\frac{4}{n} \approx .04$. When we examine our data frame, we see the 16th. represents a `Low` Performing School that is `Large` in size with low `MD%` and high `MD Diff SD`.
+```{r}
+plot(fit_md_wa_size_interact, which = 1:6)
+cooks = 4/112
+cooks
+test4
+test4%>%
+  filter(`School Code` == "00350537")
+
+test5<-test4%>%
+  filter(`School Code` != "00350537")
+
+test5<-test5%>%
+  filter(`School Code` != "01520505")
+
+test5<-test5%>%
+  filter(`School Code` != "08010605")
+
+test5
+
+
+
+```
+### Adjusted model with outliers removed
+```{r}
+adj_fit_md_wa_size_interact <- lm(formula = `EorM%` ~ `MD Diff SD` + `WA Diff SD` + `School Size` + 
+    `MD Diff SD` * `School Size`, data = test5)
+
+summary(adj_fit_md_wa_size_interact)
+plot(adj_fit_md_wa_size_interact, which = 1:6)
+BIC(adj_fit_md_wa_size_interact)
+AIC(adj_fit_md_wa_size_interact)
+test5
+4/109
+```
+We need to remove the 29th, 32nd and 40th observation.
 
 ```{r}
-fit_md_wa_percent = lm(`EorM%` ~ `MD%` + `WA%` + `MD%`*`WA%`, data = HSPhy_NextGen_SchoolSum)
-summary(fit_md_wa_percent)
+
+test6<-test5%>%
+  filter(`School Code` != "00610021")%>%
+  filter(`School Code` != "00860505")%>%
+  filter(`School Code` != "01250505")
+  
+  
+adj2_fit_md_wa_size_interact <- lm(formula = `EorM%` ~ `MD Diff SD` + `WA Diff SD` + `School Size` + 
+    `MD Diff SD` * `School Size`, data = test6)
+
+summary(adj2_fit_md_wa_size_interact)
+plot(adj2_fit_md_wa_size_interact, which = 1:6)
+BIC(adj2_fit_md_wa_size_interact)
+AIC(adj2_fit_md_wa_size_interact)
 
 ```
 
-### ERM/WA
+# Visuals
+
+## MD + WA + School Size
+*** How do I include School Size in the visual?***
 
 ```{r}
-fit_erm_wa_percent = lm(`EorM%` ~ `ERM%` + `WA%` + `ERM%`*`WA%`, data = HSPhy_NextGen_SchoolSum)
-summary(fit_erm_wa_percent)
 
-```
 
-### MD, ERM, MF
-
-```{r}
-fit_md_erm_mf_percent = lm(`EorM%` ~ `ERM%` + `MD%` + `MF%` + `MD%`*`ERM%`+ `MD%`*`MF%` + `ERM%`*`MF%`, data = HSPhy_NextGen_SchoolSum)
-summary(fit_md_erm_mf_percent)
-
-```
-
-### MD, ERM, WA
-
-```{r}
-fit_md_erm_wa_percent = lm(`EorM%` ~ `ERM%` + `MD%` + `WA%` + `MD%`*`ERM%`+ `MD%`*`WA%` + `ERM%`*`WA%`, data = HSPhy_NextGen_SchoolSum)
-summary(fit_md_erm_wa_percent)
-
-```
-
-## MD-Diff, WA Diff, and School Size
-
-```{r}
-fit_md_wa_size = lm(`EorM%` ~ `MD Diff SD` + `WA Diff SD` + `School Size` + `MD Diff SD`*`School Size`, data = HSPhy_NextGen_SchoolSum)
-summary(fit_md_wa_size)
-
-HSPhy_NextGen_SchoolSum
-```
-
-# Scatter Plots
-
-## MD + WA
-
-```{r}
-fit_md_wa$coefficients
-summary(fit_md_wa)
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = -10.019434*`MD Diff SD` +  -1.7848*`WA Diff SD` + 0.4548*`MD Diff SD`*`WA Diff SD` + 104.1191, y = `EorM%`)) +
+ggplot(data = test6, aes(x = `MD Diff SD` +  `WA Diff SD`, y = `EorM%`, color = `EM Perf Stat`)) +
   geom_point() +
   geom_smooth(method="lm", se=T)
 
 
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD Diff SD` +  `WA Diff SD`, y = `EorM%`)) +
-  geom_point() +
-  geom_smooth(method="lm", se=T)
-
-```
-
-```{r}
-
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = 1.290583*`MD%` +  -0.015233*`WA%` +  0.006053*`WA%`*`MD%` + -35.163765 , y = `EorM%`)) +
-  geom_point() +
-  geom_smooth(method="lm", se=T)
 
 ```
 
 ```{r}
 
 
-#fit_erm = lm(`E%` ~ `ERM Diff SD`, data = HSPhy_NextGen_SchoolSum)
-#summary(fit_erm)
-
-#fit_erm_md = lm(`E%` ~ log(`MD Diff SD`) + log(`ERM Diff SD`) + log(`MD Diff SD`)*log(`ERM Diff SD`), data = HSPhy_NextGen_SchoolSum)
-#summary(fit_erm_md)
-
-
-#fit_md_percent = lm(`E%` ~ log(`MD%`) + log(`ERM%`) + log(`MD%`)*log(`ERM%`), data = HSPhy_NextGen_SchoolSum)
-
-#summary(fit_md_percent)
-
-HSPhy_NextGen_SchoolSum%>%
-  select(`MD%`, `E%`)
-
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD%`, y = log(`E%`))) +
+ggplot(data = test6, aes(x = `MD Diff SD` +  `WA Diff SD`, y = `EorM%`, color = `School Size`)) +
   geom_point() +
   geom_smooth(method="lm", se=T)
 
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `ERM%`, y = log(`E%`))) +
-  geom_point() +
-  geom_smooth(method="lm", se=T)
-
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = log(`MD Diff SD`), y = (`E%`))) +
-  geom_point() +
-  geom_smooth(method="lm", se=T)
 
 
 ```
 
-```{r}
 
 
-#HSPhy_NextGen_SchoolSum.isna()
-
-fit_wa = lm((`E%`) ~ log(`WA%`), data = HSPhy_NextGen_SchoolSum)
-summary(fit_wa)
-
-fit_md = lm((`E%`) ~ log(`MD%`), data = HSPhy_NextGen_SchoolSum)
-summary(fit_md)
-
-#fit_erm = lm(`E%` ~ `ERM Diff SD`, data = HSPhy_NextGen_SchoolSum)
-#summary(fit_erm)
-
-#fit_erm_md = lm(`E%` ~ log(`MD Diff SD`) + log(`ERM Diff SD`) + log(`MD Diff SD`)*log(`ERM Diff SD`), data = HSPhy_NextGen_SchoolSum)
-#summary(fit_erm_md)
 
 
-#fit_md_percent = lm(`E%` ~ log(`MD%`) + log(`ERM%`) + log(`MD%`)*log(`ERM%`), data = HSPhy_NextGen_SchoolSum)
-
-#summary(fit_md_percent)
-
-#HSPhy_NextGen_SchoolSum%>%
-#  select(`MD%`, `E%`)
-
-ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = log(`WA%`), y = log(`E%`))) +
-  geom_point() +
-  geom_smooth(method="lm", se=T)
-
-#ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `ERM%`, y = log(`E%`))) +
- # geom_point() +
-#  geom_smooth(method="lm", se=T)
-
-#ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = log(`MD Diff SD`), y = (`E%`))) +
- # geom_point() +
-#  geom_smooth(method="lm", se=T)
-
-
-```
 
 # References
