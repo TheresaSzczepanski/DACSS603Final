@@ -857,7 +857,7 @@ HSPhy_NextGen_SchoolSum
 
 ```
 
-### Anova: SD-Diff MD
+### Visualization of School Size, EorM%, MD Diff, ERM Diff
 
 To explore the relationship between the variance in a schools' `Diff` compared to the state on Mathematics and Data items, `MD Diff SD` and a school's percentage of students meeting or exceeding expectations on the MCAS, `EorM%`, we ran a few Hypothesis tests. We considered the impact of the variability in `Evidence, Reasoning, and Modeling`, `ERM Diff SD`, and `School Size` as controls. From our table, there appears to be a relationship between `School Size`. It appears that `Small` schools have a higher variation in mathematics and data items and typically perform worse on Mathematics and Data and overall on the MCAS compared to larger schools.
 
@@ -966,81 +966,100 @@ HSPhy_NextGen_SchoolSum%>%
 
 
 ```
+### Anova:  EorM%, School Size
 
 ```{r}
 
+ANOVA_Size<- aov(`EorM%` ~ `School Size`, data=HSPhy_NextGen_SchoolSum)
 
-ANOVA_MD_size <- aov(`MD Diff SD` ~ `EM Perf Stat` + `School Size`, data=HSPhy_NextGen_SchoolSum)
+summary(ANOVA_Size)
 
-ANOVA_MD_interact <- aov(`MD Diff SD` ~ `EM Perf Stat` + `School Size` + `EM Perf Stat` * `School Size`, data=HSPhy_NextGen_SchoolSum)
-
-ANOVA_EorM_MD<- aov(`EorM%` ~ `MD Diff SD` + `School Size`, data=HSPhy_NextGen_SchoolSum)
-
-ANOVA_EorM_interact_MD <- aov(`EorM%` ~ `MD Diff SD` + `School Size` + `MD Diff SD` * `School Size`, data=HSPhy_NextGen_SchoolSum)
-
-summary(ANOVA_MD_size)
-summary(ANOVA_MD_interact)
-summary(ANOVA_EorM_MD)
-summary(ANOVA_EorM_interact_MD)
-
-HSPhy_NextGen_SchoolSum%>%
-  group_by(`School Size`, `EM Perf Stat`)%>%
-  summarize(`Mean MD%` = mean(`MD%`),
-     `Mean MD Diff SD` = mean(`MD Diff SD`),
-     `Mean ERM%` = mean(`ERM%`),
-     `Mean ERM Diff SD` = mean(`ERM Diff SD`)
-    
-             )
-HSPhy_NextGen_SchoolSum%>%
-  group_by(`School Size`)%>%
-  summarize(
-    `Mean EorM%` = mean(`EorM%`),
-      `Mean MD%` = mean(`MD%`),
-     `Mean MD Diff SD` = mean(`MD Diff SD`),
-     `Mean ERM%` = mean(`ERM%`),
-     `Mean ERM Diff SD` = mean(`ERM Diff SD`)
-             )
-
-HSPhy_NextGen_SchoolSum%>%
-  group_by(`School Size`, `EM Perf Stat`)%>%
-  summarize(`Mean EorM%` = mean(`EorM%`),
-      `Mean MD%` = mean(`MD%`),
-     `Mean MD Diff SD` = mean(`MD Diff SD`),
-     `Mean ERM%` = mean(`ERM%`),
-     `Mean ERM Diff SD` = mean(`ERM Diff SD`)
-             )
-
-HSPhy_NextGen_SchoolSum%>%
-  filter(`School Size` == "Small")
 ```
 
-## ANOVA SD-Diff ERM
-
+### 1-way Anova: EM Perf Stat: MD Diff SD, ERM Diff SD, School Size
 ```{r}
-ANOVA_ERM <- aov(`ERM Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
-ANOVA_ERM_Size <- aov(`ERM Diff SD` ~ `EM Perf Stat` + `School Size`, data=HSPhy_NextGen_SchoolSum)
-summary(ANOVA_ERM)
+
+ANOVA_MD_Perf <- aov(`MD Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
+
+ANOVA_ERM_Perf <- aov(`ERM Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
+
+ANOVA_ERM_Size <- aov(`ERM Diff SD` ~ `School Size`, data=HSPhy_NextGen_SchoolSum)
+
+ANOVA_MD_Size <- aov(`MD Diff SD` ~ `School Size`, data=HSPhy_NextGen_SchoolSum)
+
+
+summary(ANOVA_MD_Perf)
+summary(ANOVA_ERM_Perf)
+summary(ANOVA_MD_Size)
 summary(ANOVA_ERM_Size)
 
-ANOVA_EorM_ERM<- aov(`EorM%` ~ `ERM Diff SD` + `School Size`, data=HSPhy_NextGen_SchoolSum)
-
-ANOVA_EorM_interact_ERM <- aov(`EorM%` ~ `ERM Diff SD` + `School Size` + `ERM Diff SD` * `School Size`, data=HSPhy_NextGen_SchoolSum)
-
-summary(ANOVA_EorM_ERM)
-summary(ANOVA_EorM_interact_ERM)
-
 ```
 
-## SD-Diff MD + ERM
+
+### 2-way Anova: EM Perf Stat, MD Diff SD, ERM Diff SD, School Size w/out Interaction
+```{r}
+
+ANOVA_MD_Size <- aov(`MD Diff SD` ~ `EM Perf Stat` + `School Size`, data=HSPhy_NextGen_SchoolSum)
+
+ANOVA_ERM_Size_Int <- aov(`ERM Diff SD` ~ `EM Perf Stat` + `School Size`, data=HSPhy_NextGen_SchoolSum)
+
+
+summary(ANOVA_MD_Size)
+summary(ANOVA_ERM_Size)
+
+```
+### Anova: EM Perf Stat, MD Diff SD, ERM Diff SD, School Size with Interaction
+```{r}
+
+ANOVA_MD_Size_Int <- aov(`MD Diff SD` ~ `EM Perf Stat` *`School Size`, data=HSPhy_NextGen_SchoolSum)
+
+ANOVA_ERM_Size_Int <- aov(`ERM Diff SD` ~ `EM Perf Stat`*`School Size`, data=HSPhy_NextGen_SchoolSum)
+
+
+summary(ANOVA_MD_Size_Int)
+summary(ANOVA_ERM_Size_Int)
+
+```
 
 ```{r}
-ANOVA_EorM_MD_ERM <- aov(`EorM%` ~ `MD Diff SD` + `ERM Diff SD`, data=HSPhy_NextGen_SchoolSum)
 
-summary(ANOVA_EorM_MD_ERM)
-
+# HSPhy_NextGen_SchoolSum%>%
+#   group_by(`School Size`, `EM Perf Stat`)%>%
+#   summarize(`Mean MD%` = mean(`MD%`),
+#      `Mean MD Diff SD` = mean(`MD Diff SD`),
+#      `Mean ERM%` = mean(`ERM%`),
+#      `Mean ERM Diff SD` = mean(`ERM Diff SD`)
+#     
+#              )
+# HSPhy_NextGen_SchoolSum%>%
+#   group_by(`School Size`)%>%
+#   summarize(
+#     `Mean EorM%` = mean(`EorM%`),
+#       `Mean MD%` = mean(`MD%`),
+#      `Mean MD Diff SD` = mean(`MD Diff SD`),
+#      `Mean ERM%` = mean(`ERM%`),
+#      `Mean ERM Diff SD` = mean(`ERM Diff SD`)
+#              )
+# 
+# HSPhy_NextGen_SchoolSum%>%
+#   group_by(`School Size`, `EM Perf Stat`)%>%
+#   summarize(`Mean EorM%` = mean(`EorM%`),
+#       `Mean MD%` = mean(`MD%`),
+#      `Mean MD Diff SD` = mean(`MD Diff SD`),
+#      `Mean ERM%` = mean(`ERM%`),
+#      `Mean ERM Diff SD` = mean(`ERM Diff SD`)
+#              )
+# 
+# HSPhy_NextGen_SchoolSum%>%
+#   filter(`School Size` == "Small")
 ```
 
-## T Test EM Diff SD vs. MD Diff SD
+
+
+### T Test EM Diff SD vs. MD Diff SD Option 1
+I performed a paired t test for significance in the difference in the means of `SD Diff` for `Evidence Reasoning, and Modeling` and `Mathematics and Data`.
+
+***Option 1: Filter by Perf Stat and see significance***
 
 ```{r}
  HSPhy_NextGen_SchoolSum_Diff<-HSPhy_NextGen_SchoolSum %>%
@@ -1053,15 +1072,18 @@ summary(ANOVA_EorM_MD_ERM)
 
 test1 <- HSPhy_NextGen_SchoolSum_Diff%>%
   select(`Practice Cat`, `SD SD Diff`)
+
 t.test(  test1$`SD SD Diff` ~ test1$`Practice Cat`, paired = TRUE)
+
+#summary(test1)
 
 test2<-HSPhy_NextGen_SchoolSum %>%
   select(`School Name`, `EM Perf Stat`, `School Size`, `ERM Diff SD`, `MD Diff SD` )%>%
   pivot_longer(c(4:5), names_to = "Practice Cat", values_to = "SD Diff")%>%
-  filter(`EM Perf Stat` == "HighEM" | `EM Perf Stat` == "Mid")
+  filter(`EM Perf Stat` == "HighEM" |`EM Perf Stat` == "HighM" | `EM Perf Stat` == "Mid")
 
 ## filtered for High Performing Schools
-test2
+#test2
 
 t.test(test2$`SD Diff`~ test2$`Practice Cat`, paired = TRUE)
 
@@ -1072,11 +1094,90 @@ test3<-HSPhy_NextGen_SchoolSum %>%
   pivot_longer(c(4:5), names_to = "Practice Cat", values_to = "SD Diff")%>%
   filter(`EM Perf Stat` == "Low")
 
-## filtered for High Performing Schools
-test3
+## filtered for Low Performing Schools
+#test3
 
 t.test(test3$`SD Diff`~ test3$`Practice Cat`, paired = TRUE)
 ```
+### Welch's T-Test  MD Diff  by Low Performing SD Option 2
+I performed a paired Welch's test for significance in the difference in the means of `MD SD Diff` in Lowest Performing Schools vs. those that were not.
+
+***Option 2:  Perf Stat Group and see significance for MD Diff***
+
+```{r}
+test4<-HSPhy_NextGen_SchoolSum %>%
+  mutate(`Lowest Performing` = case_when(
+    `EM Perf Stat` == "HighEM" ~ "N",
+    `EM Perf Stat` == "HighM" ~ "N",
+    `EM Perf Stat` == "Mid" ~ "N",
+    `EM Perf Stat` == "Mid-Low" ~ "N",
+    `EM Perf Stat` == "Low" ~ "Y",
+  ))
+
+test4
+Low <- subset(test4, test4$`Lowest Performing` == "Y")
+Not_Low <-subset(test4, test4$`Lowest Performing` == "N")
+var.test(Low$`MD Diff SD`, Not_Low$`MD Diff SD`)
+
+# welch
+
+twogroupt<-t.test(Low$`MD Diff SD`, Not_Low$`MD Diff SD`, var.equal = FALSE, alternative = "greater")
+
+twogroupt
+
+#t.test(test4$`MD Diff SD` ~ test4$`Lowest Performing`, paired = TRUE)
+#HSPhy_NextGen_SchoolSum_Diff_Cat%>%
+ # select(`MD SD Diff`, `Lowest Performing`, )
+
+
+
+```
+### Student's T-Test  ERM Diff  by Low Performing SD Option 2
+I performed a Student's t- test for significance in the difference in the means of `ERM SD Diff` in Lowest Performing Schools vs. those that were not.
+
+***Option 2:  Perf Stat Group and see significance for ERM Diff***
+
+```{r}
+
+var.test(Low$`ERM Diff SD`, Not_Low$`ERM Diff SD`)
+
+twogroupt_ERM<-t.test(Low$`ERM Diff SD`, Not_Low$`ERM Diff SD`, var.equal = TRUE, alternative = "greater")
+
+twogroupt_ERM
+
+#t.test(test4$`MD Diff SD` ~ test4$`Lowest Performing`, paired = TRUE)
+#HSPhy_NextGen_SchoolSum_Diff_Cat%>%
+ # select(`MD SD Diff`, `Lowest Performing`, )
+
+
+
+```
+## Regression Model
+
+### MD Diff Alone
+
+```{r}
+fit_md = lm(`EorM%` ~ (`MD Diff SD`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_md)
+
+```
+
+### MD and ERM Diff
+
+This states that MD is significant but ERM is not statistically
+significant?
+
+```{r}
+
+
+fit_md_erm = lm(`EorM%` ~ (`ERM Diff SD` + `MD Diff SD`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_erm)
+
+```
+
+
+
+### Visualizations
 
 ## Hypothesis 2: Reporting Cateogy and School Performance
 
@@ -1128,7 +1229,7 @@ summary(ANOVA_MF)
 
 
 
-## Visualizations
+### Visualizations
 
 ```{r}
 
@@ -1158,26 +1259,6 @@ ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = (`WA Diff SD`), y = ((`E%`)))) +
 
 ```
 
-## MD Diff Alone
-
-```{r}
-fit_md = lm(`EorM%` ~ (`MD Diff SD`), data = HSPhy_NextGen_SchoolSum)
-summary(fit_md)
-
-```
-
-## MD and ERM Diff
-
-This states that MD is significant but ERM is not statistically
-significant?
-
-```{r}
-
-
-fit_md_erm = lm(`EorM%` ~ (`ERM Diff SD` + `MD Diff SD`), data = HSPhy_NextGen_SchoolSum)
-summary(fit_md_erm)
-
-```
 
 ## Reporting Category DIFF alone and with interactions
 
