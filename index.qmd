@@ -29,8 +29,10 @@ editor:
 source('dependencies.R')
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 #install.packages("stargazer")
-library(stargazer)
-library(flexmix)
+#library(stargazer)
+#library(flexmix)
+
+#library(qpcR)
 ```
 
 # Research Questions
@@ -219,20 +221,20 @@ HSPhy_SchoolSize <- rbind(HSPhy_2023_SchoolSizeDF, HSPhy_2022_SchoolSizeDF)%>%
 quantile <- quantile(HSPhy_SchoolSize$`Tested Count`)
 HSPhy_Size<-HSPhy_SchoolSize%>%
   mutate(`School Size` = case_when(
-    `Tested Count` <= quantile[2] ~ "Small",
+    `Tested Count` <= quantile[2] ~ 0, # small
     `Tested Count` > quantile[2] &
-      `Tested Count` <= quantile[3] ~ "Low-Mid",
+      `Tested Count` <= quantile[3] ~ 1, #Low-Mid
     `Tested Count` > quantile[3] &
-      `Tested Count` <= quantile[4] ~ "Upper-Mid",
+      `Tested Count` <= quantile[4] ~ 2, #Upper Mid
     `Tested Count` > quantile[4] &
-      `Tested Count` <= quantile[5] ~ "Large",
+      `Tested Count` <= quantile[5] ~ 3, # Large
   ))%>%
-  mutate(`School Size` = recode_factor(`School Size`,
-                                            "Small" = "Small",
-                                            "Low-Mid" = "Low-Mid",
-                                            "Upper-Mid" = "Upper-Mid",
-                                            "Large" = "Large",
-                                            .ordered = TRUE))%>%
+  # mutate(`School Size` = recode_factor(`School Size`,
+  #                                           "Small" = "Small",
+  #                                           "Low-Mid" = "Low-Mid",
+  #                                           "Upper-Mid" = "Upper-Mid",
+  #                                           "Large" = "Large",
+  #                                           .ordered = TRUE))%>%
   select(`School Name`, `School Code`, `School Size`)
 
 
@@ -525,97 +527,6 @@ HSPhy_NextGen_SchoolSum%>%
             caption = "NextGen HS Physics MCAS") +
     #xlab("")+
   facet_wrap(~`EM Perf Stat`, scale ="free_y")
-# HSPhy_NextGen_SchoolSum%>%
-#   select(`EM Perf Stat`, `ERMDiff`, `MDDiff` )%>%
-#   pivot_longer(c(2:3), names_to = "Practice Cat", values_to = "%Points")%>%
-#   ggplot( aes(x= `EM Perf Stat`, y=`%Points`, fill= `EM Perf Stat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     #theme_ipsum() +
-#     theme(
-#       
-#       plot.title = element_text(size=11)
-#     ) +
-#     labs( y = "%Points Earned",
-#             title = "Student Practice Cat. Achievement by Performance Level",
-#             x = "",
-#             caption = "NextGen HS Physics MCAS") +
-#     #xlab("")+
-#   facet_wrap(~`Practice Cat`)
-
-# HSPhy_NextGen_SchoolSum%>%
-#   select(`EM Perf Stat`, `ERM%`, `MD%` )%>%
-#   pivot_longer(c(2:3), names_to = "Practice Cat", values_to = "%Points")%>%
-#   ggplot( aes(x= `Practice Cat`, y=`%Points`, fill= `Practice Cat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     #theme_ipsum() +
-#     theme(
-#       
-#       plot.title = element_text(size=11)
-#     ) +
-#     labs( y = "%Points Earned",
-#             title = "Student Practice Cat. Achievement by Performance Level",
-#             x = "",
-#             caption = "NextGen HS Physics MCAS") +
-#     #xlab("")+
-#   facet_wrap(~`EM Perf Stat`, scale ="free_y")
-  
-
-# HSPhy_NextGen_SchoolSum %>%
-#   ggplot( aes(x= `EM Perf Stat`, y=`MD%`, fill= `EM Perf Stat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     theme_ipsum() +
-#     theme(
-#       legend.position="none",
-#       plot.title = element_text(size=11)
-#     ) +
-#     ggtitle("A boxplot with jitter") +
-#     xlab("")
-
-# HSPhy_NextGen_SchoolSum %>%
-#   ggplot( aes(x= `EM Perf Stat`, y=`MD Diff SD`, fill= `EM Perf Stat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     theme_ipsum() +
-#     theme(
-#       legend.position="none",
-#       plot.title = element_text(size=11)
-#     ) +
-#     ggtitle("A boxplot with jitter") +
-#     xlab("")
-# 
-# HSPhy_NextGen_SchoolSum %>%
-#   ggplot( aes(x= `EM Perf Stat`, y=`ERM Diff SD`, fill= `EM Perf Stat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     theme_ipsum() +
-#     theme(
-#       legend.position="none",
-#       plot.title = element_text(size=11)
-#     ) +
-#     ggtitle("A boxplot with jitter") +
-#     xlab("")
-# 
-# HSPhy_NextGen_SchoolSum %>%
-#   ggplot( aes(x= `EM Perf Stat`, y=`ERM%`, fill= `EM Perf Stat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     theme_ipsum() +
-#     theme(
-#       legend.position="none",
-#       plot.title = element_text(size=11)
-#     ) +
-#     ggtitle("A boxplot with jitter") +
-#     xlab("")
-
 
 ```
 
@@ -749,104 +660,8 @@ HSPhy_NextGen_SchoolSum%>%
     #xlab("")+
   facet_wrap(~`EM Perf Stat`)
 
-# HSPhy_NextGen_SchoolSum %>%
-#   ggplot( aes(x= `EM Perf Stat`, y=`MF%`, fill= `EM Perf Stat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     theme_ipsum() +
-#     theme(
-#       legend.position="none",
-#       plot.title = element_text(size=11)
-#     ) +
-#     ggtitle("A boxplot with jitter") +
-#     xlab("")
-# 
-# HSPhy_NextGen_SchoolSum %>%
-#   ggplot( aes(x= `EM Perf Stat`, y=`MF Diff SD`, fill= `EM Perf Stat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     theme_ipsum() +
-#     theme(
-#       legend.position="none",
-#       plot.title = element_text(size=11)
-#     ) +
-#     ggtitle("A boxplot with jitter") +
-#     xlab("")
-# 
-# 
-# 
-# HSPhy_NextGen_SchoolSum %>%
-#   ggplot( aes(x= `EM Perf Stat`, y=`EN%`, fill= `EM Perf Stat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     theme_ipsum() +
-#     theme(
-#       legend.position="none",
-#       plot.title = element_text(size=11)
-#     ) +
-#     ggtitle("A boxplot with jitter") +
-#     xlab("")
-# 
-# HSPhy_NextGen_SchoolSum %>%
-#   ggplot( aes(x= `EM Perf Stat`, y=`EN Diff SD`, fill= `EM Perf Stat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     theme_ipsum() +
-#     theme(
-#       legend.position="none",
-#       plot.title = element_text(size=11)
-#     ) +
-#     ggtitle("A boxplot with jitter") +
-#     xlab("")
-# 
-# HSPhy_NextGen_SchoolSum %>%
-#   ggplot( aes(x= `EM Perf Stat`, y=`WA%`, fill= `EM Perf Stat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     theme_ipsum() +
-#     theme(
-#       legend.position="none",
-#       plot.title = element_text(size=11)
-#     ) +
-#     ggtitle("A boxplot with jitter") +
-#     xlab("")
-# 
-# HSPhy_NextGen_SchoolSum %>%
-#   ggplot( aes(x= `EM Perf Stat`, y=`WA Diff SD`, fill= `EM Perf Stat`)) +
-#     geom_boxplot() +
-#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-#     geom_jitter(color="black", size=0.4, alpha=0.9) +
-#     theme_ipsum() +
-#     theme(
-#       legend.position="none",
-#       plot.title = element_text(size=11)
-#     ) +
-#     ggtitle("A boxplot with jitter") +
-#     xlab("")
 
 ```
-
-# Hypothesis Testing
-
-## Hypothesis 1: Variation in Mathematics
-
-```{=html}
-<style>
-div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
-</style>
-```
-::: blue
--   A school's percentage of students classified as `Exceeding or Meeting`
-    expectations on the Introductory Physics MCAS is negatively
-    associated with a school's variance in performance relative to
-    students in the state on `Mathematics and Data` items, `SD MD Diff`.
-:::
-
 ```{r}
 HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
   ungroup()
@@ -854,14 +669,20 @@ HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
 HSPhy_NextGen_SchoolSum<-HSPhy_NextGen_SchoolSum%>%
   mutate(`EorM%` = `E%` + `M%`)
 
-HSPhy_NextGen_SchoolSum
+#HSPhy_NextGen_SchoolSum
 
 ```
 
-### Visualization of School Size, EorM%, MD Diff, ERM Diff
+## Visualization of School Size, EorM%, MD Diff, ERM Diff
 
-To explore the relationship between the variance in a schools' `Diff` compared to the state on Mathematics and Data items, `MD Diff SD` and a school's percentage of students meeting or exceeding expectations on the MCAS, `EorM%`, we ran a few Hypothesis tests. We considered the impact of the variability in `Evidence, Reasoning, and Modeling`, `ERM Diff SD`, and `School Size` as controls. From our table, there appears to be a relationship between `School Size`. It appears that `Small` schools have a higher variation in mathematics and data items and typically perform worse on Mathematics and Data and overall on the MCAS compared to larger schools.
-
+To explore the relationship between the variance in a schools' `Diff`
+compared to the state on Mathematics and Data items, `MD Diff SD` and a
+school's percentage of students meeting or exceeding expectations on the
+MCAS, `EorM%`, we also will considered the impact
+of `School Size`, `0`: Smallest, `3`: Largest schools, as a control. It appears from our visuals that
+`Small` schools have a higher variation in mathematics and data items
+smaller school's typically perform worse on Mathematics and Data and overall on the
+MCAS compared to larger schools.
 
 ```{r}
 
@@ -880,6 +701,7 @@ HSPhy_NextGen_SchoolSum%>%
 
 
 ```
+
 ```{r}
 
 
@@ -928,9 +750,14 @@ HSPhy_NextGen_SchoolSum%>%
 
 ```
 
-However, when you group the schools by `EM Perf Stat`, you find that the highest performing, `High EM`, `Small` schools have a higher percentage of students meeting or exceeding expectations.
+However, when you group the schools by `EM Perf Stat`, you find that the
+highest performing, `High EM`, `Small` schools have a higher percentage
+of students meeting or exceeding expectations.
 
-Across all sizes, it seems that the weakest performing schools have more variation in mathematics and data and the strongest performing schools have less variability in `Mathematics and Data` than in `Evidence, Reasoning, and Modeling`.
+Across all sizes, it seems that the weakest performing schools have more
+variation in mathematics and data and the strongest performing schools
+have less variability in `Mathematics and Data` than in
+`Evidence, Reasoning, and Modeling`.
 
 ```{r}
 
@@ -944,284 +771,104 @@ Across all sizes, it seems that the weakest performing schools have more variati
      `Mean ERM Diff SD` = mean(`ERM Diff SD`)
              )
 
-HSPhy_NextGen_SchoolSum%>%
-  select(`School Size`, `EorM%`, `MD Diff SD`, `EM Perf Stat` )%>%
-  #pivot_longer(c(2:3), names_to = "Practice Cat", values_to = "SD Diff")%>%
-  ggplot( aes(x= `School Size`, y=`EorM%`, fill= `School Size`)) +
-    geom_boxplot() +
-    scale_fill_viridis(discrete = TRUE, alpha=0.6) +
-    geom_jitter(color="black", size=0.4, alpha=0.9) +
-    #theme_ipsum() +
-    theme(
-     
-      plot.title = element_text(size=11),
-      axis.title.x=element_blank(),
-      axis.text.x=element_blank()
-    ) +
-     labs( y = "SD Diff",
-            title = "Students Meeting or Exceeding Expectations . Variation by Achievement Level",
-            x = "",
-            caption = "NextGen HS Physics MCAS") +
-    #xlab("")+
-  facet_wrap(~`EM Perf Stat`, scales = "free")
-
-
-```
-### Anova:  EorM%, School Size
-
-```{r}
-
-ANOVA_Size<- aov(`EorM%` ~ `School Size`, data=HSPhy_NextGen_SchoolSum)
-
-summary(ANOVA_Size)
-
-```
-
-### 1-way Anova: EM Perf Stat: MD Diff SD, ERM Diff SD, School Size
-```{r}
-
-ANOVA_MD_Perf <- aov(`MD Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
-
-ANOVA_ERM_Perf <- aov(`ERM Diff SD` ~ `EM Perf Stat`, data=HSPhy_NextGen_SchoolSum)
-
-ANOVA_ERM_Size <- aov(`ERM Diff SD` ~ `School Size`, data=HSPhy_NextGen_SchoolSum)
-
-ANOVA_MD_Size <- aov(`MD Diff SD` ~ `School Size`, data=HSPhy_NextGen_SchoolSum)
-
-
-summary(ANOVA_MD_Perf)
-summary(ANOVA_ERM_Perf)
-summary(ANOVA_MD_Size)
-summary(ANOVA_ERM_Size)
-
-```
-
-
-### 2-way Anova: EM Perf Stat, MD Diff SD, ERM Diff SD, School Size w/out Interaction
-```{r}
-
-ANOVA_MD_Size <- aov(`MD Diff SD` ~ `EM Perf Stat` + `School Size`, data=HSPhy_NextGen_SchoolSum)
-
-ANOVA_ERM_Size_Int <- aov(`ERM Diff SD` ~ `EM Perf Stat` + `School Size`, data=HSPhy_NextGen_SchoolSum)
-
-
-summary(ANOVA_MD_Size)
-summary(ANOVA_ERM_Size)
-
-```
-### Anova: EM Perf Stat, MD Diff SD, ERM Diff SD, School Size with Interaction
-```{r}
-
-ANOVA_MD_Size_Int <- aov(`MD Diff SD` ~ `EM Perf Stat` *`School Size`, data=HSPhy_NextGen_SchoolSum)
-
-ANOVA_ERM_Size_Int <- aov(`ERM Diff SD` ~ `EM Perf Stat`*`School Size`, data=HSPhy_NextGen_SchoolSum)
-
-
-summary(ANOVA_MD_Size_Int)
-summary(ANOVA_ERM_Size_Int)
-
-```
-
-```{r}
-
 # HSPhy_NextGen_SchoolSum%>%
-#   group_by(`School Size`, `EM Perf Stat`)%>%
-#   summarize(`Mean MD%` = mean(`MD%`),
-#      `Mean MD Diff SD` = mean(`MD Diff SD`),
-#      `Mean ERM%` = mean(`ERM%`),
-#      `Mean ERM Diff SD` = mean(`ERM Diff SD`)
-#     
-#              )
-# HSPhy_NextGen_SchoolSum%>%
-#   group_by(`School Size`)%>%
-#   summarize(
-#     `Mean EorM%` = mean(`EorM%`),
-#       `Mean MD%` = mean(`MD%`),
-#      `Mean MD Diff SD` = mean(`MD Diff SD`),
-#      `Mean ERM%` = mean(`ERM%`),
-#      `Mean ERM Diff SD` = mean(`ERM Diff SD`)
-#              )
-# 
-# HSPhy_NextGen_SchoolSum%>%
-#   group_by(`School Size`, `EM Perf Stat`)%>%
-#   summarize(`Mean EorM%` = mean(`EorM%`),
-#       `Mean MD%` = mean(`MD%`),
-#      `Mean MD Diff SD` = mean(`MD Diff SD`),
-#      `Mean ERM%` = mean(`ERM%`),
-#      `Mean ERM Diff SD` = mean(`ERM Diff SD`)
-#              )
-# 
-# HSPhy_NextGen_SchoolSum%>%
-#   filter(`School Size` == "Small")
-```
-
-
-
-### T Test EM Diff SD vs. MD Diff SD Option 1
-I performed a paired t test for significance in the difference in the means of `SD Diff` for `Evidence Reasoning, and Modeling` and `Mathematics and Data`.
-
-***Option 1: Filter by Perf Stat and see significance: Low: MD-Diff Greater than ERM-Diff, Not Low: MD-Diff Less than ERM Diff***
-
-```{r}
- HSPhy_NextGen_SchoolSum_Diff<-HSPhy_NextGen_SchoolSum %>%
-  select(`EM Perf Stat`, `ERM Diff SD`, `MD Diff SD` )%>%
-  pivot_longer(c(2:3), names_to = "Practice Cat", values_to = "SD Diff")%>%
-   group_by(`Practice Cat`, `EM Perf Stat`)%>%
-   summarize(`SD SD Diff` = sd(`SD Diff`, na.rm = TRUE),
-             `Mean SD Diff` = mean(`SD Diff`, na.rm = TRUE))%>%
-  ungroup()
-
-test1 <- HSPhy_NextGen_SchoolSum_Diff%>%
-  select(`Practice Cat`, `SD SD Diff`)
-
-t.test(  test1$`SD SD Diff` ~ test1$`Practice Cat`, paired = TRUE)
-
-#summary(test1)
-
-test2<-HSPhy_NextGen_SchoolSum %>%
-  select(`School Name`, `EM Perf Stat`, `School Size`, `ERM Diff SD`, `MD Diff SD` )%>%
-  pivot_longer(c(4:5), names_to = "Practice Cat", values_to = "SD Diff")%>%
-  filter(`EM Perf Stat` == "HighEM" |`EM Perf Stat` == "HighM" | `EM Perf Stat` == "Mid")
-
-## filtered for High Performing Schools
-#test2
-
-t.test(test2$`SD Diff`~ test2$`Practice Cat`, paired = TRUE, alternative = "greater")
-
-
-
-test3<-HSPhy_NextGen_SchoolSum %>%
-  select(`School Name`, `EM Perf Stat`, `School Size`, `ERM Diff SD`, `MD Diff SD` )%>%
-  pivot_longer(c(4:5), names_to = "Practice Cat", values_to = "SD Diff")%>%
-  filter(`EM Perf Stat` == "Low")
-
-## filtered for Low Performing Schools
-#test3
-
-t.test(test3$`SD Diff`~ test3$`Practice Cat`, paired = TRUE, alternative = "less")
-```
-### Welch's T-Test  MD Diff  by Low Performing SD Option 2
-I performed a paired Welch's test for significance in the difference in the means of `MD SD Diff` in Lowest Performing Schools vs. those that were not.
-
-***Option 2:  Perf Stat Group and see significance for MD Diff***
-
-```{r}
-test4<-HSPhy_NextGen_SchoolSum %>%
-  mutate(`Lowest Performing` = case_when(
-    `EM Perf Stat` == "HighEM" ~ "N",
-    `EM Perf Stat` == "HighM" ~ "N",
-    `EM Perf Stat` == "Mid" ~ "N",
-    `EM Perf Stat` == "Mid-Low" ~ "N",
-    `EM Perf Stat` == "Low" ~ "Y",
-  ))
-
-test4
-Low <- subset(test4, test4$`Lowest Performing` == "Y")
-Not_Low <-subset(test4, test4$`Lowest Performing` == "N")
-var.test(Low$`MD Diff SD`, Not_Low$`MD Diff SD`)
-
-# welch
-
-twogroupt<-t.test(Low$`MD Diff SD`, Not_Low$`MD Diff SD`, var.equal = FALSE, alternative = "greater")
-
-twogroupt
-
-#t.test(test4$`MD Diff SD` ~ test4$`Lowest Performing`, paired = TRUE)
-#HSPhy_NextGen_SchoolSum_Diff_Cat%>%
- # select(`MD SD Diff`, `Lowest Performing`, )
-
+#   select(`School Size`, `EorM%`, `MD Diff SD`, `EM Perf Stat` )%>%
+#   #pivot_longer(c(2:3), names_to = "Practice Cat", values_to = "SD Diff")%>%
+#   ggplot( aes(x= `School Size`, y=`EorM%`, fill= `School Size`)) +
+#     geom_boxplot() +
+#     scale_fill_viridis(discrete = TRUE, alpha=0.6) +
+#     geom_jitter(color="black", size=0.4, alpha=0.9) +
+#     #theme_ipsum() +
+#     theme(
+#      
+#       plot.title = element_text(size=11),
+#       axis.title.x=element_blank(),
+#       axis.text.x=element_blank()
+#     ) +
+#      labs( y = "SD Diff",
+#             title = "Students Meeting or Exceeding Expectations . Variation by Achievement Level",
+#             x = "",
+#             caption = "NextGen HS Physics MCAS") +
+#     #xlab("")+
+#   facet_wrap(~`EM Perf Stat`, scales = "free")
 
 
 ```
-### Student's T-Test  ERM Diff  by Low Performing SD Option 2
-I performed a Student's t- test for significance in the difference in the means of `ERM SD Diff` in Lowest Performing Schools vs. those that were not.
+# Hypothesis Testing
 
-***Option 2:  Perf Stat Group and see significance for ERM Diff***
+## Hypothesis 1: Variation in Mathematics
 
-```{r}
-
-var.test(Low$`ERM Diff SD`, Not_Low$`ERM Diff SD`)
-
-twogroupt_ERM<-t.test(Low$`ERM Diff SD`, Not_Low$`ERM Diff SD`, var.equal = TRUE, alternative = "greater")
-
-twogroupt_ERM
-
-#t.test(test4$`MD Diff SD` ~ test4$`Lowest Performing`, paired = TRUE)
-#HSPhy_NextGen_SchoolSum_Diff_Cat%>%
- # select(`MD SD Diff`, `Lowest Performing`, )
-
-
-
+```{=html}
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
 ```
+::: blue
+-   A school's percentage of students classified as
+    `Exceeding or Meeting` expectations on the Introductory Physics MCAS
+    is negatively associated with a school's variance in performance
+    relative to students in the state on `Mathematics and Data` items,
+    `SD MD Diff`.
+:::
+
 ## Regression Model
 
 ### MD Diff Alone and with ERM
 
-
 ```{r}
-test4
-fit_md = lm(`EorM%` ~ (`MD Diff SD`), data = test4)
+fit_md = lm(`EorM%` ~ (`MD Diff SD`), data = HSPhy_NextGen_SchoolSum)
 summary(fit_md)
 
-fit_md_erm = lm(`EorM%` ~ (`MD Diff SD` + `ERM Diff SD` + `MD Diff SD` * `ERM Diff SD`), data = test4)
+fit_size = lm(`EorM%` ~ (`School Size`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_size)
+
+fit_md_erm = lm(`EorM%` ~ (`MD Diff SD` + `ERM Diff SD` + `MD Diff SD` * `ERM Diff SD`), data = HSPhy_NextGen_SchoolSum)
 summary(fit_md_erm)
 
-fit_md_size = lm(`EorM%` ~ (`MD Diff SD` + `Tested Students`), data = test4)
-summary(fit_md_size)
+fit_md_size1 = lm(`EorM%` ~ (`MD Diff SD` + `Tested Students`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_size1)
+
+fit_md_size2 = lm(`EorM%` ~ (`MD Diff SD` + `School Size`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_size2)
 
 ```
 
-### MD Diff and School Size via Tested Students
+### MD Diff and School Size with Interaction
 
-This states that MD is significant and `Tested Students` is statistically
-significant?
+This states that MD is significant and `Tested Students` is
+statistically significant?
 
 ```{r}
 
-fit_md_size = lm(`EorM%` ~ (`MD Diff SD` + `Tested Students`), data = test4)
-summary(fit_md_size)
+fit_md_size_interact = lm(`EorM%` ~ (`MD Diff SD` + `School Size` + `MD Diff SD` * `School Size`), data = HSPhy_NextGen_SchoolSum)
+summary(fit_md_size_interact)
 
 ```
-
-### Should I use the discrete variable Tested Students or the Factor `School Size`???
-
-
+### Robustness Checks
 ```{r}
-
-fit_md_size_fact = lm(`EorM%` ~ (`MD Diff SD` + `School Size`), data = test4)
-summary(fit_md_size_fact)
+AIC(fit_md_size_interact)
+BIC(fit_md_size_interact)
+#PRESS(fit_md_size_interact)
 
 ```
-### Model Comparison: MD vs. MD_Size: Anova F test
-```{r}
-anova(fit_md, fit_md_size_fact)
-```
-
-
 ### Visualizations
 
-***Question, do I plot the actual model with coefficients?***
-*** How do I include School Size in the visual?***
-
+***Question, do I plot the actual model with coefficients?*** \*\*\* How
+do I include School Size in the visual?\*\*\*
 
 #### EM Perf Stat Color: MD Diff SD, EorM%
+
 ```{r}
-ggplot(data = test4, aes(x = `MD Diff SD`, y = `EorM%`, color = `EM Perf Stat`)) +
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD Diff SD`, y = `EorM%`, color = `School Size`)) +
   geom_point() +
   geom_smooth(method="lm", se=T) 
 ```
 
-
-
-
 ```{r}
-ggplot(data = test4, aes(x = `MD Diff SD`, y = `EorM%`, color = `School Size`)) +
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD Diff SD`, y = `EorM%`, color = `EM Perf Stat`)) +
   geom_point() +
-  geom_smooth(method="lm", se=T) #+
-  #facet_grid( ~ `EM Perf Stat`, scale = "free") 
-
+  geom_smooth(method="lm", se=T) 
 ```
-
 
 
 ## Hypothesis 2: Reporting Cateogy and School Performance
@@ -1271,11 +918,6 @@ summary(ANOVA_MF)
   
   
 ```
-
-
-
-
-
 
 ## Reporting Category DIFF alone and with interactions
 
@@ -1333,10 +975,10 @@ summary(fit_md_wa_interact)
 ```
 
 ### Model Comparison: MD vs. MD_WA_interact: Anova F test
+
 ```{r}
 anova(fit_md, fit_md_wa_interact)
 ```
-
 
 ### MD/: MF, not significant...possible multicollinearity
 
@@ -1359,10 +1001,6 @@ summary(fit_md_en_interact)
 
 ```
 
-
-
-
-
 ### MD-Diff, WA Diff, and School Size
 
 ```{r}
@@ -1371,33 +1009,42 @@ summary(fit_md_wa_size_interact)
 
 
 ```
+
 ### Model Comparison: MD_WA_interact vs. MD_WA_Size_interact: Anova F test
+
 ```{r}
 anova(fit_md_wa_interact, fit_md_wa_size_interact)
 
 ```
 
 ### Model Comparison: MD_WA_interact vs. MD_WA_Size_interact: BIC
+
 ```{r}
 summary(fit_md_wa_interact)
 summary(fit_md_wa_size_interact)
-summary(fit_md_size_fact)
+summary(fit_md_size_interact)
 BIC(fit_md_wa_interact)
 BIC(fit_md_wa_size_interact)
-BIC(fit_md_size_fact)
+BIC(fit_md_size_interact)
 AIC(fit_md_wa_interact)
 AIC(fit_md_wa_size_interact)
-AIC(fit_md_size_fact)
+AIC(fit_md_size_interact)
 ```
+
 # Diagnostic of Final Model: MD_WA_Size_interact
-Cook's distance says the 16th, 47th, and 104th observations are in violation, since $\frac{4}{n} \approx .04$. When we examine our data frame, we see the 16th. represents a `Low` Performing School that is `Large` in size with low `MD%` and high `MD Diff SD`.
+
+Cook's distance says the 16th, 47th, and 104th observations are in
+violation, since $\frac{4}{n} \approx .04$. When we examine our data
+frame, we see the 16th. represents a `Low` Performing School that is
+`Large` in size with low `MD%` and high `MD Diff SD`.
+
 ```{r}
 plot(fit_md_wa_size_interact, which = 1:6)
 cooks = 4/112
 cooks
-test4
-test4%>%
-  filter(`School Code` == "00350537")
+
+test4<-HSPhy_NextGen_SchoolSum%>%
+  filter(`School Code` != "00350537")
 
 test5<-test4%>%
   filter(`School Code` != "00350537")
@@ -1413,7 +1060,9 @@ test5
 
 
 ```
+
 ### Adjusted model with outliers removed
+
 ```{r}
 adj_fit_md_wa_size_interact <- lm(formula = `EorM%` ~ `MD Diff SD` + `WA Diff SD` + `School Size` + 
     `MD Diff SD` * `School Size`, data = test5)
@@ -1425,6 +1074,7 @@ AIC(adj_fit_md_wa_size_interact)
 test5
 4/109
 ```
+
 We need to remove the 29th, 32nd and 40th observation.
 
 ```{r}
@@ -1448,12 +1098,13 @@ AIC(adj2_fit_md_wa_size_interact)
 # Visuals
 
 ## MD + WA + School Size
-*** How do I include School Size in the visual?***
+
+\*\*\* How do I include School Size in the visual?\*\*\*
 
 ```{r}
 
 
-ggplot(data = test6, aes(x = `MD Diff SD` +  `WA Diff SD`, y = `EorM%`, color = `EM Perf Stat`)) +
+ggplot(data = test6, aes(x = `MD Diff SD`, y = `EorM%`, color = `EM Perf Stat`)) +
   geom_point() +
   geom_smooth(method="lm", se=T)
 
@@ -1464,17 +1115,12 @@ ggplot(data = test6, aes(x = `MD Diff SD` +  `WA Diff SD`, y = `EorM%`, color = 
 ```{r}
 
 
-ggplot(data = test6, aes(x = `MD Diff SD` +  `WA Diff SD`, y = `EorM%`, color = `School Size`)) +
+ggplot(data = HSPhy_NextGen_SchoolSum, aes(x = `MD Diff SD` +  `WA Diff SD`, y = `EorM%`, color = `School Size`)) +
   geom_point() +
   geom_smooth(method="lm", se=T)
 
 
 
 ```
-
-
-
-
-
 
 # References

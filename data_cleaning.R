@@ -52,8 +52,7 @@ HSPhy_2022_SchoolSizeDF<-read_excel("data/2022_Physics_NextGenMCASItem.xlsx", sk
 
 ## State Item Analysis Report
 
-#| warning: false
-#| message: false
+
 HSPhy_2022_StateItemDF<-read_state_item("data/2022_Physics_District_NextGenMCASItem.xlsx", 2022, "PHY" )
 
 #HSPhy_2022_StateItemDF
@@ -309,5 +308,4 @@ HSPhy_NextGen_SchoolSum <-left_join(HSPhy_NextGen_SchoolCatSum, HSPhy_NextGen_Su
                                            "School Code" = "School Code"))
 
 HSPhy_NextGen_SchoolSum
-
 
